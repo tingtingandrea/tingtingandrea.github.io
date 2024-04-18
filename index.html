@@ -28,6 +28,7 @@
     <h1>WCS Competition Filming</h1>
     
   </div>
+  
   <script>
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -42,28 +43,33 @@
   
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    window.addEventListener("load", async function () {
+      loginFirebase()
+    });
     
-    firebase.auth().signInAnonymously()
-    .then(() => {
-      console.log("Anonymous authentication successful");
-    })
-    .catch((error) => {
-      console.error("Error authenticating anonymously:", error);
-    });
-
-    const db = firebase.firestore();
-
-    // Example: Add data to Firestore
-    db.collection("Dancers").doc("user1").set({
-      name: "John Doe",
-      email: "john@example.com"
-    })
-    .then(() => {
-      console.log("Document successfully written!");
-    })
-    .catch((error) => {
-      console.error("Error writing document: ", error);
-    });
+    async function loginFirebase() {
+      await firebase.auth().signInAnonymously()
+      .then(() => {
+        console.log("Anonymous authentication successful");
+      })
+      .catch((error) => {
+        console.error("Error authenticating anonymously:", error);
+      });
+  
+      const db = firebase.firestore();
+  
+      // Example: Add data to Firestore
+      db.collection("Dancers").doc("user1").set({
+        name: "John Doe",
+        email: "john@example.com"
+      })
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+    ]
   </script>
 
 </body>
