@@ -74,6 +74,14 @@
       .catch((error) => {
         console.error("Error writing document: ", error);
       });
+      // Example: Add data to Firestore
+      db.collection("Dancers").doc("user1").get()
+      .then(() => {
+        console.log("Document successfully got!");
+      })
+      .catch((error) => {
+        console.error("Error getting document: ", error);
+      });
     }
   </script>
 
