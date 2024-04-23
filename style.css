@@ -1,1 +1,12 @@
-
+  <style>
+      @font-face {
+          font-family: 'Maven Pro';
+          src: url('path/to/MavenPro-Regular.ttf') format('truetype'); /* Adjust the path as needed */
+          font-weight: normal;
+          font-style: normal;
+      }
+      
+      body {
+          font-family: 'Maven Pro', sans-serif;
+      }
+  </style>
