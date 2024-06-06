@@ -142,7 +142,7 @@ If no profile or bib number yet redirect to profile page
     </nav>
     <section id="schedule-tabContent"  class="myProfile" align="center" style="margin-top: 20px;">
       <div class="table-container" align="center">
-          <table id="sortableTable" style="border:1px black solid;border-radius: 5px;width: 95%;">
+          <table style="border:1px black solid;border-radius: 5px;width: 95%;">
               <thead>
                   <tr style="background-color: 189EA2;color:white;">
                       <th onclick="sortTable(0)"><p>Date <span class="fa fa-caret-down"></span></p></th>
@@ -153,7 +153,7 @@ If no profile or bib number yet redirect to profile page
                       <th onclick="sortTable(3)"><p>Filming <span class="fa fa-caret-down"></span></p></th>
                   </tr>
               </thead>
-              <tbody contenteditable="true">
+              <tbody id="heatTable" contenteditable="true" align="center">
                   <tr>
                     <td><input type="date" value="2024-06-01"></td>
                     <td><input type="time" value="12:00"></td>
@@ -191,6 +191,8 @@ If no profile or bib number yet redirect to profile page
                       <th onclick="sortTable(1)"><p>Time <span class="fa fa-caret-down"></span></p></th>
                       <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
                       <th onclick="sortTable(3)"><p>Heats <span class="fa fa-caret-down"></span></p></th>
+                      <th style="display:none;"><p>Id</p></th>
+                      <th style="display:none;"><p>Event</p></th>
                   </tr>
               </thead>
               <tbody id="competitionTable" align="center" contenteditable="true">
@@ -220,15 +222,20 @@ If no profile or bib number yet redirect to profile page
           <datalist id="CompetitionsList_options">
           </datalist>
           <script type="text/javascript">
-            function saveCompetition() {
-              
-            }
+            function saveCompetition(data) {
+              for ( var d in data ) {
+                if ( data[d] === "" ) return;
+              }
+              var dataID = data.Id;
+              delete data.Id
+              competitionDatabase.doc(dataID).set(data);
+            };
           </script>
       </div>
     </section>
     <section id="dancers-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
       <div class="table-container" align="center">
-          <table id="sortableTable" style="border:1px black solid;border-radius: 5px;width: 95%;text-align: center !important;">
+          <table style="border:1px black solid;border-radius: 5px;width: 95%;text-align: center !important;">
               <thead>
                   <tr style="background-color: 189EA2;color:white;">
                       <th onclick="sortTable(0)"><p>Bib Number<span class="fa fa-caret-down"></span></p></th>
@@ -556,7 +563,7 @@ If no profile or bib number yet redirect to profile page
       documentSet(CompetitionsList_options,"innerHTML",await setupOptions(CompetitionsList));
       dancersDatabase = db.collection("Dancers");
       //Profiles
-      competitionDatabase = db.collection("Competitons");
+      competitionDatabase = db.collection("Competitions");
       //List of Comps, how many heats
       scheduleDatabase = db.collection("Heats");
       //Full schedule itemized
@@ -575,6 +582,32 @@ If no profile or bib number yet redirect to profile page
       await loadDancerList();
 
       documentSet("competitionTable","innerHTML","");
+      competitionsData = await getFirebase(competitionDatabase,{field:"Event",query:"==",input:myEvent});
+      competitionsData.sort((a, b) => {
+          // Compare Dates
+          if (a.Date < b.Date) return -1;
+          if (a.Date > b.Date) return 1;
+
+          // Dates are equal, compare Times
+          if (a.Time < b.Time) return -1;
+          if (a.Time > b.Time) return 1;
+
+          // Dates and Times are equal, compare Heats
+          if (a.Heat < b.Heat) return -1;
+          if (a.Heat > b.Heat) return 1;
+
+          // Dates, Times, and Heats are equal, compare Names
+          if (a.Name < b.Name) return -1;
+          if (a.Name > b.Name) return 1;
+
+          // All fields are equal
+          return 0;
+      });
+      console.log(competitionsData);
+
+      for ( var c in competitionsData ) {
+        addCompetition(competitionsData[c]);
+      }
 
 
 
@@ -623,10 +656,12 @@ If no profile or bib number yet redirect to profile page
     function addCompetition(competitionData) {
       documentSet("competitionTable","insertAdjacentHTML",`
             <tr>
-              <td><input type="date" value="`+readObject(competitionData,"Date",new Date()).toJSON().slice(0,10)+`" onchange="getRowData(this.closest('tr'))"></td>
-              <td><input type="time" value="`+readObject(competitionData,"Time")+`" onchange="getRowData(this.closest('tr'))"></td>
-              <td><input type="text" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="getRowData(this.closest('tr'))"></td>
-              <td><input type="number" value="`+readObject(competitionData,"Heat")+`" onchange="getRowData(this.closest('tr'))"></td>
+              <td><input type="date" value="`+new Date(readObject(competitionData,"Date",new Date())).toJSON().slice(0,10)+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="time" value="`+readObject(competitionData,"Time")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="text" style="text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="number" style="text-align:center;" value="`+readObject(competitionData,"Heat")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
+              <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
           </tr>
       `);
     };
@@ -642,10 +677,14 @@ If no profile or bib number yet redirect to profile page
       if ( firebaseDoc.exists || !firebaseDoc.empty ) {
         var data = {};
         if ( !readObject(firebaseDoc,"empty",true) ) {
+          data = [];
           firebaseDoc = firebaseDoc.docs;
           await firebaseDoc.forEach(function(doc) {
             //console.log(doc);
-            Object.assign(data, doc.data());
+            //Object.assign(data, doc.data());
+            var docData = doc.data();
+            docData.Id = doc.id;
+            data.push(docData);
           });
         } else {
           data = firebaseDoc.data();
@@ -916,13 +955,13 @@ If no profile or bib number yet redirect to profile page
         
         const rowData = {};
         cells.forEach((cell, index) => {
-            const header = headers[index].innerText;
+            const header = headers[index].innerText.trim();
             //console.log(cell);
             const input = cell.querySelector('input');
             if (input) {
-                rowData[header] = input.value;
+                rowData[header] = input.value.trim();
             } else {
-                rowData[header] = cell.innerText;
+                rowData[header] = cell.innerText.trim();
             }
         });
 
@@ -947,7 +986,6 @@ If no profile or bib number yet redirect to profile page
             const swipeDistance = touchEndY - touchStartY;
             if (swipeDistance > 100) { // Adjust the threshold as needed
                 console.log('Swipe down detected. Reloading...');
-                //location.reload();
                 setupFirebase();
             }
         }
