@@ -973,10 +973,12 @@ If no profile or bib number yet redirect to profile page
     let touchEndY = 0;
 
     document.addEventListener('touchstart', function(event) {
+        event.preventDefault()
         touchStartY = event.touches[0].clientY;
     }, false);
 
     document.addEventListener('touchend', function(event) {
+        event.preventDefault()
         touchEndY = event.changedTouches[0].clientY;
         handleGesture();
     }, false);
