@@ -3,6 +3,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WCS Film Crew</title>
   
+  <script src="https://unpkg.com/akar-icons-fonts"></script>
+  <link rel="stylesheet" href="./style.css">
+
   <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
   
   <!-- TODO: Add SDKs for Firebase products that you want to use https://firebase.google.com/docs/web/setup#available-libraries -->
@@ -19,139 +22,318 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/solid.min.css" rel="stylesheet">
   
-  <link rel="stylesheet" href="styles.css">
-
 </head>
 
 <body>
-  <div align="center" style="width:100%">
-    <h1>WCS Competition Filming</h1>
-    
-  </div>
   <div class="phone">
-  	<header class="header">
-  		<div class="header-logo">
-  			<div>
-  				<span></span>
-  				<span></span>
-  				<span></span>
-  				<span></span>
-  			</div>
-  		</div>
-  		<div class="header-title">
-  			Home
-  		</div>
-  		<div class="header-buttons">
-  			<button class="notifications">
-  				<i class="ai-bell"></i>
-  			</button>
-  			<button class="avatar">
-  <img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" />
-  			</button>
-  		</div>
-  	</header>
-  	<section class="title">
-  		<h1>Listening Everyday</h1>
-  		<p>Explore millions of music according to your taste</p>
-  	</section>
-  	<section class="search">
-  		<div class="search-inner">
-  			<button class="search-button">
-  				<i class="ai-search"></i>
-  			</button>
-  			<input type="text" class="search-input" placeholder="Search Music" />
-  
-  		</div>
-  	</section>
-  
-  	<nav class="navigation">
-  		<a href="#" class="navigation-item active">Overview</a>
-  		<a href="#" class="navigation-item">Songs</a>
-  		<a href="#" class="navigation-item">Albums</a>
-  		<a href="#" class="navigation-item">Artists</a>
-  	</nav>
-  	<section class="playlists">
-  
-  		<article class="card">
-  			<div class="card-inner">
-  				<span class="card-pin"></span>
-  				<div class="card-image">
-  					<img src="https://assets.codepen.io/285131/illustration-hand-with-cigarette-icon.jpg" />
-  				</div>
-  				<div class="card-content">
-  					<div class="card-meta">
-  						<span class="card-meta-number">20 songs</span>
-  						<button class="card-meta-button">
-  							<i class="ai-circle-triangle-right-fill"></i>
-  						</button>
-  					</div>
-  					<h2 class="card-title">Alan Walker</h2>
-  				</div>
-  			</div>
-  		</article>
-  
-  		<article class="card">
-  			<div class="card-inner">
-  				<span class="card-pin"></span>
-  				<div class="card-image">
-  					<img src="https://assets.codepen.io/285131/hand-drawn-monster-milkshake.jpg" />
-  				</div>
-  				<div class="card-content">
-  					<div class="card-meta">
-  						<span class="card-meta-number">20 songs</span>
-  						<button class="card-meta-button">
-  							<i class="ai-circle-triangle-right-fill"></i>
-  						</button>
-  					</div>
-  					<h2 class="card-title">Tim Bergling</h2>
-  				</div>
-  			</div>
-  		</article>
-  	</section>
-  	<section class="currently-playing">
-  
-  		<article class="card horizontal">
-  			<div class="card-inner">
-  				<span class="card-pin simple"></span>
-  				<div class="card-image">
-  					<img src="https://assets.codepen.io/285131/pink-pastel-juicy-banana.jpg" />
-  				</div>
-  				<div class="card-content">
-  					<div class="card-meta">
-  						<span class="card-meta-artist">Marshmello</span>
-  						<button class="card-meta-button" style="opacity: 0;">
-  							<i class="ai-circle-triangle-right-fill"></i>
-  						</button>
-  					</div>
-  					<h2 class="card-title">Hate the Other Side
-  						<span class="card-time">3:40</span>
-  					</h2>
-  				</div>
-  				<span class="card-pin simple"></span>
-  			</div>
-  		</article>
-  	</section>
-  	<footer class="menu">
-  		<div class="menu-inner">
-  			<a href="#" class="menu-item active">
-  				<i class="ai-home"></i>
-  			</a>
-  			<a href="#" class="menu-item">
-  				<i class="ai-heart"></i>
-  			</a>
-  			<a href="#" class="menu-item">
-  				<i class="ai-fire"></i>
-  			</a>
-  			<a href="#" class="menu-item">
-  				<i class="ai-gear"></i>
-  			</a>
-  		</div>
-  	</footer>
+    <header class="header" style="width:100%;">
+      <!--<div class="header-logo">
+        <div>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>-->
+      <div class="header-title" style="min-width: max-content;margin-left:0px;">
+        <h2 style="color: 189EA2;font-weight:bold;margin-right: 20px;">WCS Competition Filming</h2>
+      </div>
+      <div class="header-buttons">
+        <button class="notifications">
+          <i class="ai-bell"></i><!--Total Competiting & Filming-->
+        </button>
+        <button class="avatar">
+          <img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" />
+        </button>
+      </div>
+    </header>
+    <!--<section class="title">
+      <h1>Listening Everyday</h1>
+      <p>Explore millions of music according to your taste</p>
+    </section>-->
+    <section class="search">
+      <div class="search-inner">
+        <button class="search-button">
+          <i class="ai-search"></i>
+        </button>
+        <input type="text" class="search-input" placeholder="Search Dancer" />
+      </div>
+      <section class="currently-playing" style="display:flex;margin: 10px 15px;width:100%">
+        <article class="card horizontal" style="width:40%;margin-left: 10px;">
+          <div class="card-inner" style="padding: 0px;">
+            <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);"></span>
+            <div class="card-image" style="width:40px;height:40px;">
+              <p style="transform: scale(1.5);text-align: center;">💃🏻🕺</p>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-meta-artist">Dancer</span>
+                <button class="card-meta-button" style="opacity: 0;">
+                  <i class="ai-circle-triangle-right-fill"></i>
+                </button>
+              </div>
+            </div>
+            <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);left: calc(100% - 5px);top: calc(100% - 5px);"></span>
+          </div>
+        </article>
+        <article class="card horizontal" style="width:40%;margin-top: 7px;">
+          <div class="card-inner" style="padding: 0px;">
+            <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);"></span>
+            <div class="card-image" style="width:40px;height:40px;">
+              <p style="transform: scale(1.5);text-align: center;">🎥</p>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-meta-artist">Filming</span>
+                <button class="card-meta-button" style="opacity: 0;">
+                  <i class="ai-circle-triangle-right-fill"></i>
+                </button>
+              </div>
+            </div>
+            <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);left: calc(100% - 5px);top: calc(100% - 5px);"></span>
+          </div>
+        </article>
+
+        <!--<div style="background-color: #ec008c;border-radius: 20px;width: 200px;">
+          <input type="checkbox" class="search-input" style="width: 15px;" placeholder="Search Music" />
+          <label>Dancer</label>
+        </div>
+        <div style="background-color: #ec008c;border-radius: 20px;width: 200px;">
+          <input type="checkbox" class="search-input" style="width: 15px;" placeholder="Search Music" />
+          <label>Filming</label>
+        </div>-->
+      </section>
+    </section><!--ADD CHECKBOXES, Dancer/Filming-->
+
+    <nav class="navigation">
+      <a href="#" class="navigation-item active" id="schedule-tab" onclick="event.preventDefault();clickTab(this);">Schedule</a>
+      <a href="#" class="navigation-item" id="competitions-tab" onclick="event.preventDefault();clickTab(this);">Competitions</a>
+      <a href="#" class="navigation-item" id="dancers-tab" onclick="event.preventDefault();clickTab(this);">Dancers</a>
+      <a href="#" class="navigation-item" id="profile-tab" onclick="event.preventDefault();clickTab(this);">Profile</a>
+      <script type="text/javascript">
+          function clickTab(tab) {
+            //console.log(tab)
+            var tabDiv = tab.closest("nav").children;
+            for ( var t = 0; t < tabDiv.length; t++ ) {
+              var navTab = tabDiv[t];
+              documentSet(navTab,"classRemove","active");
+              documentSet(navTab.id+"Content","display","none");
+            }
+            documentSet(tab,"classAdd","active");
+            documentSet(tab.id+"Content","remove","display");
+          }
+      </script>
+    </nav>
+    <section id="schedule-tabContent"  class="myProfile" align="center" style="margin-top: 20px;">
+      <div class="table-container" align="center">
+          <table id="sortableTable" style="border:1px black solid;border-radius: 5px;width: 95%;">
+              <thead>
+                  <tr style="background-color: 189EA2;color:white;">
+                      <th onclick="sortTable(0)"><p>Date <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(1)"><p>Time <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3)"><p>Dancer <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3)"><p>Filming <span class="fa fa-caret-down"></span></p></th>
+                  </tr>
+              </thead>
+              <tbody contenteditable="true">
+                  <tr>
+                    <td><input type="date" value="2024-06-01"></td>
+                    <td><input type="time" value="12:00"></td>
+                    <td contenteditable="true">Swimming</td>
+                    <td contenteditable="true">Sarah</td>
+                    <td contenteditable="true">Andrea</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-02"></td>
+                    <td contenteditable="true"><input type="time" value="14:00"></td>
+                    <td contenteditable="true">Running</td>
+                    <td contenteditable="true">Heat 2</td>
+                    <td contenteditable="true">Heat 1</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-03"></td>
+                    <td contenteditable="true"><input type="time" value="16:00"></td>
+                    <td contenteditable="true">Jumping</td>
+                    <td contenteditable="true">Heat 3</td>
+                    <td contenteditable="true">Heat 1</td>
+                </tr>
+              </tbody>
+          </table>
+      </div>
+    </section>
+    <section id="competitions-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
+      <div class="table-container" align="center">
+          <table id="sortableTable" style="border:1px black solid;border-radius: 5px;width: 95%;">
+              <thead>
+                  <tr style="background-color: 189EA2;color:white;">
+                      <th onclick="sortTable(0)"><p>Date <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(1)"><p>Time <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3)"><p>Heats <span class="fa fa-caret-down"></span></p></th>
+                  </tr>
+              </thead>
+              <tbody contenteditable="true">
+                  <tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-01"></td>
+                    <td contenteditable="true"><input type="time" value="12:00"></td>
+                    <td contenteditable="true">Swimming</td>
+                    <td contenteditable="true">Heat 1</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-02"></td>
+                    <td contenteditable="true"><input type="time" value="14:00"></td>
+                    <td contenteditable="true">Running</td>
+                    <td contenteditable="true">Heat 2</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-03"></td>
+                    <td contenteditable="true"><input type="time" value="16:00"></td>
+                    <td contenteditable="true">Jumping</td>
+                    <td contenteditable="true">Heat 3</td>
+                </tr>
+              </tbody>
+          </table>
+      </div>
+    </section>
+    <section id="dancers-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
+      <div class="table-container" align="center">
+          <table id="sortableTable" style="border:1px black solid;border-radius: 5px;width: 95%;text-align: center !important;">
+              <thead>
+                  <tr style="background-color: 189EA2;color:white;">
+                      <th onclick="sortTable(0)"><p>Bib Number<span class="fa fa-caret-down"></span></p></th>
+                      <th style="width: 100px;text-align: center;"><p>Profile</p></th>
+                      <th onclick="sortTable(2)"><p>Name<span class="fa fa-caret-down"></span></p></th>
+                  </tr>
+              </thead>
+              <tbody contenteditable="true">
+                  <tr>
+                    <td contenteditable="true">102</td>
+                    <td contenteditable="true"><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
+                    <td contenteditable="true">Sarah</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">102</td>
+                    <td contenteditable="true"><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
+                    <td contenteditable="true">Sarah</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">102</td>
+                    <td contenteditable="true"><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
+                    <td contenteditable="true">Sarah</td>
+                </tr>
+              </tbody>
+          </table>
+      </div>
+    </section>
+    <section id="profile-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
+        <img id="profileImage" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" alt="Profile Image" style="display: inline;max-width: 150px;">
+        <input type="file" id="imageInput" style="display: none;" accept="image/*">
+        <button id="changeImageButton" class="fa fa-camera" style="display: inline;background-color: #ec088c;border-color: #ec088c;color: white;border-radius: 20px;padding: 10px;"></button><br><br>
+        <script type="text/javascript">
+          document.getElementById('changeImageButton').addEventListener('click', function() {
+              document.getElementById('imageInput').click();
+          });
+
+          document.getElementById('imageInput').addEventListener('change', function(event) {
+              const file = event.target.files[0];
+              if (file) {
+                  const reader = new FileReader();
+                  reader.onload = function(e) {
+                      document.getElementById('profileImage').src = e.target.result;
+                  };
+                  reader.readAsDataURL(file);
+              }
+          });
+
+        </script>
+      <label style="font-weight:bold;margin-right: 5px;">Name</label><input type="text"><br><br>
+      <label style="font-weight:bold;margin-right: 5px;">Competition Level</label><input type="text"><br><br>
+      <button id="changeImageButton" style="display: inline;background-color: #ec088c;border-color: #ec088c;color: white;border-radius: 25px;padding: 10px;width: 150px;">SAVE</button>
+    </section>
+    <!--<section class="playlists" style="display:nonel">
+
+      <article class="card">
+        <div class="card-inner">
+          <span class="card-pin"></span>
+          <div class="card-image">
+            <img src="https://assets.codepen.io/285131/illustration-hand-with-cigarette-icon.jpg" />
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-number">20 songs</span>
+              <button class="card-meta-button">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+            <h2 class="card-title">Alan Walker</h2>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-inner">
+          <span class="card-pin"></span>
+          <div class="card-image">
+            <img src="https://assets.codepen.io/285131/hand-drawn-monster-milkshake.jpg" />
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-number">20 songs</span>
+              <button class="card-meta-button">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+            <h2 class="card-title">Tim Bergling</h2>
+          </div>
+        </div>
+      </article>
+    </section>-->
+    <!--<section class="currently-playing">
+      <article class="card horizontal">
+        <div class="card-inner">
+          <span class="card-pin simple"></span>
+          <div class="card-image">
+            <img src="https://assets.codepen.io/285131/pink-pastel-juicy-banana.jpg" />
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-artist">Marshmello</span>
+              <button class="card-meta-button" style="opacity: 0;">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+            <h2 class="card-title">Hate the Other Side
+              <span class="card-time">3:40</span>
+            </h2>
+          </div>
+          <span class="card-pin simple"></span>
+        </div>
+      </article>
+    </section>-->
+    <footer class="menu">
+      <div class="menu-inner">
+      </div>
+      <!--<div class="menu-inner">
+        <a href="#" class="menu-item active">
+          <i class="ai-home"></i>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="ai-heart"></i>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="ai-fire"></i>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="ai-gear"></i>
+        </a>
+      </div-->
+    </footer>
   </div>
   
   <script>
     // Your web app's Firebase configuration
-    const firebaseConfig = {
+    /*const firebaseConfig = {
       apiKey: "AIzaSyChyTHwZRXmbv6_S5e3Q0BmgE3vy1syT-g",
       authDomain: "wcs-comps.firebaseapp.com",
       projectId: "wcs-comps",
@@ -164,7 +346,7 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     window.addEventListener("load", async function () {
-      Swal.fire({title: "Admin password"});
+      //Swal.fire({title: "Admin password"});
       //loginFirebase()
     });
     
@@ -192,14 +374,165 @@
         console.error("Error writing document: ", error);
       });*/
       // Example: Add data to Firestore
-      db.collection("Dancers").doc("user1").get()
+      /*db.collection("Dancers").doc("user1").get()//ADD BACK
       .then(() => {
         console.log("Document successfully got!");
       })
       .catch((error) => {
         console.error("Error getting document: ", error);
       });
+    }*/
+
+    function documentSet(id , setting , value) {
+      try {
+        var style = false;
+        if ( id === ":root" ) {
+          document.querySelector(id).style.setProperty(setting, value);
+          return;
+        }
+        if ( (/(change|onclick|dblclick)/gim).test(setting) ) {
+          doc = $("#"+id);
+          if ( setting === "change" ) return doc.change();
+          if ( setting === "onclick" ) return doc.attr("onclick",value);
+          if ( setting === "ondblclick" ) {
+            doc.attr("ondblclick",value);
+            return;
+          } else if ( setting === "dblclick" ) {
+            return doc.dblclick();
+          }
+        };
+        var doc = document.getElementById(id);
+        if ( doc === null ) {
+          doc = id
+        };
+        if ( !(doc instanceof Element) ) {
+          return;
+        };
+        //console.log(doc)
+        if ( setting === "get" ) {
+          return readObject(doc,value,doc);
+        } else if ( setting.includes("display") || value === "display" || (setting.includes("Style")&&setting!=="Style") ) {
+          doc = doc.style;
+          style = true;
+          setting = setting.replace("Style","");
+        }
+        if ( setting === "click" ) {
+          return doc.click();
+        } else if ( setting === "focus" ) {
+          return doc.focus();
+        } else if ( setting === "reset" ) {
+          return doc.reset();
+        } else if ( setting === "check" ) {
+          return doc.setAttribute("checked",true);
+        } else if ( setting === "uncheck" ) {
+          return doc.removeAttribute("checked");
+        } else if ( setting === "classAdd" ) {
+          return doc.classList.add(value);
+        } else if ( setting === "classRemove" ) {
+          return doc.classList.remove(value);
+        } else if ( setting === "remove" ) {
+          if ( style ) {
+            return doc.removeProperty(value);
+          } else if ( value.includes("HTML") ) {
+            doc[value] = "";
+          } else {
+            return doc.removeAttribute(value);
+          }
+        } else if ( setting === "value" ) {
+          var selected = true;
+          var text = hidden = "";
+          if ( doc.tagName === "SELECT" ) {
+            //console.log(value)
+            if ( typeof value === "object" ) {
+              text = readObject(value,"text",readObject(value,"value",""));
+              hidden = readObject(value,"hidden","");
+              selected = readObject(value,"selected",true);
+              value = readObject(value,"value","");
+            } else {
+              text = value;
+            };
+            //console.log(value);
+            var valueExists = {
+              length: 0,
+            };
+            if ( value === "" || hidden === "hidden" ) {
+            } else {
+              valueExists = $("#"+doc.id+" option[value=\""+value+"\"]");
+              //console.log(valueExists);
+            }
+            if ( valueExists.length === 0 ) {
+              var selectedTrue = "";
+              if ( selected && doc.multiple ) {
+                selectedTrue = "selected";
+                selected = false;
+              }
+              documentSet(doc.id,"insertAdjacentElement","<option value=\""+value+"\" "+selectedTrue+" "+hidden+">"+text+"</option>");
+            }
+          }
+          if ( selected ) {
+            return doc.value = value;
+          } else {
+            return;
+          }
+        } else if ( setting === "insertAdjacentElement" ) {
+          return doc.insertAdjacentHTML("afterbegin", value);
+        } else if ( setting === "insertAdjacentHTML" ) {
+          return doc.insertAdjacentHTML("beforeend", value);
+        } else if ( setting === "appendChild" ) {
+          return doc.appendChild(value);
+        } else if ( (setting === "readonly"||setting === "readOnly") && value === undefined ) {
+          return doc.readOnly = true;
+        } else if ( setting === "editQuill" ) {
+          doc.insertAdjacentHTML("beforeend", value);
+          return;
+        } else if ( setting === "mentionQuill" ) {
+          mentionList = value;
+          documentSet(id+"Container","innerHTML",
+          `<div id="emailTemplate_editor" class="plaintext">
+          `+documentSet(id,"get","innerHTML")+`
+          </div>`
+          );
+          return quillEmail();
+        }
+        return doc[setting] = value;
+      } catch (err) {
+        console.log(err);
+        return;
+      }
     }
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById('sortableTable');
+        const rows = Array.from(table.rows).slice(1);
+        const isAscending = table.getAttribute('data-sort-direction') === 'ascending';
+        
+        rows.sort((a, b) => {
+            let aText, bText;
+            
+            if (columnIndex === 0 || columnIndex === 1) {
+                aText = a.cells[columnIndex].querySelector('input').value;
+                bText = b.cells[columnIndex].querySelector('input').value;
+            } else {
+                aText = a.cells[columnIndex].innerText;
+                bText = b.cells[columnIndex].innerText;
+            }
+            
+            if (columnIndex === 0) { // Date column
+                return isAscending ? new Date(aText) - new Date(bText) : new Date(bText) - new Date(aText);
+            } else if (columnIndex === 1) { // Time column
+                const aTime = new Date(`1970-01-01T${aText}Z`);
+                const bTime = new Date(`1970-01-01T${bText}Z`);
+                return isAscending ? aTime - bTime : bTime - aTime;
+            } else { // Other columns
+                return isAscending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            }
+        });
+        
+        rows.forEach(row => table.tBodies[0].appendChild(row));
+        table.setAttribute('data-sort-direction', isAscending ? 'descending' : 'ascending');
+    }
+
+
   </script>
 
 </body>
