@@ -617,6 +617,21 @@
     font-weight: normal !important;
   }
 
+  .table-container {
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+  }
+
+  table {
+      width: 100%;
+      border-collapse: collapse;
+  }
+
+  td {
+    min-width: 100px;
+    width: max-content;
+  }
 
 //SWAL ALERTS//////////////////////////////////////////////////////////////////////////////////////
   .swal-wide{
