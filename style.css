@@ -41,6 +41,10 @@
           font-size: 12px; /* Reduce font size for smaller screens */
       }
       
+      .phone-container {
+          width:90%;
+      }
+      
       .phone {
           width:85%;
       }
@@ -76,7 +80,11 @@
       body {
           font-size: 12px; /* Reduce font size for smaller screens */
       }
-
+      
+      .phone-container {
+          width:90%;
+      }
+      
       .phone {
           width:85%;
       }
