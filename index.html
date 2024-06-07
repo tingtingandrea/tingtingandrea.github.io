@@ -649,6 +649,7 @@
           });
         }
         userID = user.uid;
+        console.log(userID);
         //if ( user.isAnonymous ) userID = "test";
         await setupFirebase();
       });
@@ -685,7 +686,12 @@
       myEvent = readObject(myProfile,"Current Event");
       documentSet("currentEvent","value",myEvent);
 
-      if ( myProfile === undefined || myProfile === [] ) return;
+      if ( myProfile === undefined || myProfile === [] ) {
+        Swal.fire({
+          title: "Please complete your profile."
+        });
+        return;
+      }
 
       allDancers = {};
       allDancers_list = {};
@@ -699,6 +705,12 @@
       documentSet("dancersList_options","innerHTML",await setupOptions(allDancers_list,"private","",true));
       //console.log(allDancers);
 
+      if ( myEvent === undefined || myEvent === "" ) {
+        Swal.fire({
+          title: "Please select your<br>Current Event."
+        });
+        return;
+      }
       await loadDancerList();
 
 
