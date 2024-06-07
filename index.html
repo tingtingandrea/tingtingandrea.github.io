@@ -52,7 +52,7 @@
         <button class="notifications">
           <i class="ai-bell"></i><!--Total Competiting & Filming-->
         </button>
-        <button class="avatar">
+        <button class="avatar" onclick="documentSet('profile-tab','click')">
           <img id="profileAvatar" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" />
         </button>
       </div>
@@ -596,8 +596,6 @@
       myEvent = readObject(myProfile,"Current Event");
       documentSet("currentEvent","value",myEvent);
 
-      await loadDancerList();
-
 
       allDancers = {};
       allDancers_list = {};
@@ -610,6 +608,8 @@
       }
       documentSet("dancersList_options","innerHTML",await setupOptions(allDancers_list,"private","",true));
       console.log(allDancers);
+
+      await loadDancerList();
 
 
       var dancerSearchValues = documentSet("dancerSearch","get","value").trim();
@@ -696,6 +696,7 @@
       documentSet("heatTable","innerHTML","");
 
 
+      var notificationBell = 0;
       for ( var h in heatSchedule ) {
         var scheduleData = heatSchedule[h];
         console.log(scheduleData);
@@ -705,7 +706,10 @@
         heatSchedule[h].Date = competitionData.Date;
         heatSchedule[h].Time = competitionData.Time;
         heatSchedule[h].Heats = competitionData.Heats;
+        if ( scheduleData.Dancer === userID || scheduleData.Filming === userID ) notificationBell++;
       }
+      documentSet(":root","--notification-bell", `"`+notificationBell+`"`);
+
       console.log("heatSchedule");
       heatSchedule = heatSchedule.sort((a, b) => {
           // Compare Dates
@@ -765,6 +769,7 @@
               <td>`+readObject(dancerData,"Name")+`</td>
           </tr>
         `;
+        allDancers[dancerBibs[d]]["BIB Number"] = d;
       }
 
       if ( myBib === "" && firstLogin  ) documentSet("profile-tab","click");
@@ -784,14 +789,56 @@
       var Filmer = readObject(filmerData,"Name");
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
-              <td><input type="text" value="`+heatName+`" onchange="saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="width: -webkit-fill-available;text-align: center;"></td>
-              <td><input type="text" value="`+Dancer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="width: -webkit-fill-available;text-align: center;"></td>
-              <td><input type="text" value="`+Filmer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="width: -webkit-fill-available;text-align: center;"></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+heatName+`" onchange="saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" style="margin-left:-15px" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Dancer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" style="margin-left:-15px" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Filmer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" style="margin-left:-15px" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
               <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
           </tr>
       `);
     };
+
+    function displayInfo(id) {
+      var displayData = allCompetitions[id];
+      if ( displayData === undefined ) displayData = allDancers[id];
+      console.log(displayData);
+
+      if ( displayData === undefined ) return;
+
+      var dataKeys = ["Date","Time","Heats","Profile","BIB Number"];
+      var html = "";
+      for ( var d in dataKeys ) {
+        var displayText = displayData[dataKeys[d]];
+        if ( displayText !== undefined ) {
+          if ( dataKeys[d] === "Profile" ) {
+            html += `<img src=`+displayText+` style="width:150px;">`;
+          } else {
+            if ( dataKeys[d] === "Date" ) {
+              displayText = new Date(displayText);
+              displayText = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(displayText)+`, `+new Intl.DateTimeFormat('en-US', { month: 'long' }).format(displayText)+` `+displayText.getDate()+getDaySuffix(displayText);
+            }
+
+            html += `<p><span style="font-weight:bold;">`+dataKeys[d]+`</span>: `+displayText+`<p>`;
+          }
+        }
+      }
+      html = `<div align="center">`+html+`</div>`;
+
+      Swal.fire({
+        title: readObject(displayData,"Competition",readObject(displayData,"Name")),
+        html
+      });
+    }
+
+    function getDaySuffix(day) {
+        if (day > 3 && day < 21) return 'th'; // For 11th to 20th
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
 
     function addCompetition(competitionData) {
       documentSet("competitionTable","insertAdjacentHTML",`
