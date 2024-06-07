@@ -52,6 +52,11 @@
           font-size: 0.9em; /* Adjust font size for smaller screens */
       }
 
+      .navigation-item {
+          font-size: 0.9em; /* Adjust font size for smaller screens */
+        
+      }
+
       /* Adjust other elements as needed */
   }
   
