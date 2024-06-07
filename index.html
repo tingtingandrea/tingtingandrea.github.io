@@ -564,6 +564,7 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const storage = firebase.storage();
+    var firstLogin = true;
 
     window.addEventListener("load", async function () {
       await auth.onAuthStateChanged( async function(user) {
