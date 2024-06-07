@@ -38,6 +38,7 @@
   /* Media query for screens with width less than 900px */
   @media (max-width: 900px) {
       body {
+          width:85%;
           font-size: 14px; /* Reduce font size for smaller screens */
       }
 
@@ -70,6 +71,7 @@
 
   @media (max-width: 500px) {
       body {
+          width:85%;
           font-size: 12px; /* Reduce font size for smaller screens */
       }
 
