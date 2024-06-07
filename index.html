@@ -676,7 +676,7 @@
 
       //console.log(userID);
       var myProfile = await getFirebase(dancersDatabase , userID);//dancersDatabase.doc(userID).get()
-      //console.log(myProfile);
+      console.log(myProfile);
       if ( ( myProfile === [] || readObject(myProfile,"Name") === "" ) && firstLogin ) documentSet("profile-tab","click");
       documentSet("profileAvatar","src",readObject(myProfile,"Profile"));
       documentSet("profileImage","src",readObject(myProfile,"Profile"));
@@ -685,7 +685,7 @@
       myEvent = readObject(myProfile,"Current Event");
       documentSet("currentEvent","value",myEvent);
 
-      if ( myProfile === [] ) return;
+      if ( myProfile === undefined || myProfile === [] ) return;
 
       allDancers = {};
       allDancers_list = {};
