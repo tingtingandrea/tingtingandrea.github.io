@@ -1,9 +1,3 @@
-<!--finish competition
-finsih heats
-dancers in 1 list to assign
-check boxes filtering for danccer vs dilming
-If no profile or bib number yet redirect to profile page
--->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,7 +66,9 @@ If no profile or bib number yet redirect to profile page
         <button class="search-button">
           <i class="ai-search" style="color:var(--c-blue-500);"></i>
         </button>
-        <input type="text" class="search-input" placeholder="Search Dancer" />
+        <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase()" placeholder="Search Dancer" />
+        <datalist id="dancersList_options">
+        </datalist>
       </div>
     </section>
     <section class="" style="display:flex;margin: 10px 15px;width:100%;align-items: center;justify-content: center;">
@@ -145,41 +141,38 @@ If no profile or bib number yet redirect to profile page
           <table style="border:1px black solid;border-radius: 5px;width: 95%;">
               <thead>
                   <tr style="background-color: 189EA2;color:white;">
-                      <th onclick="sortTable(0)"><p>Date <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(1)"><p>Time <span class="fa fa-caret-down"></span></p></th>
                       <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(2)"><p>Heat <span class="fa fa-caret-down"></span></p></th>
                       <th onclick="sortTable(3)"><p>Dancer <span class="fa fa-caret-down"></span></p></th>
                       <th onclick="sortTable(3)"><p>Filming <span class="fa fa-caret-down"></span></p></th>
+                      <th style="display:none;"><p>Id</p></th>
+                      <th style="display:none;"><p>Event</p></th>
                   </tr>
               </thead>
               <tbody id="heatTable" contenteditable="true" align="center">
-                  <tr>
-                    <td><input type="date" value="2024-06-01"></td>
-                    <td><input type="time" value="12:00"></td>
-                    <td contenteditable="true">Swimming</td>
-                    <td contenteditable="true">Heat 2</td>
+                <!--<tr>
+                    <td><input type="text" value="id">Competition + Heat</td>
                     <td contenteditable="true">Sarah</td>
                     <td contenteditable="true">Andrea</td>
-                </tr>
-                <tr>
-                    <td contenteditable="true"><input type="date" value="2024-06-02"></td>
-                    <td contenteditable="true"><input type="time" value="14:00"></td>
-                    <td contenteditable="true">Running</td>
-                    <td contenteditable="true">Heat 2</td>
-                    <td contenteditable="true">Heat 2</td>
-                    <td contenteditable="true">Heat 1</td>
-                </tr>
-                <tr>
-                    <td contenteditable="true"><input type="date" value="2024-06-03"></td>
-                    <td contenteditable="true"><input type="time" value="16:00"></td>
-                    <td contenteditable="true">Jumping</td>
-                    <td contenteditable="true">Heat 2</td>
-                    <td contenteditable="true">Heat 3</td>
-                    <td contenteditable="true">Heat 1</td>
-                </tr>
+                    <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
+                    <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
+                </tr>-->
               </tbody>
           </table>
+          <datalist id="competitionHeat_options">
+          </datalist>
+          <div align="right">
+            <p style="width: 350px;text-align: right;" onclick="addHeat()"><span class="fa fa-plus"></span>Add new Filming Schedule</p>
+          </div>
+          <script type="text/javascript">
+            function saveHeat(data) {
+              for ( var d in data ) {
+                if ( data[d] === "" && d !== "Filming" ) return;
+              }
+              var dataID = data.Id;
+              delete data.Id
+              scheduleDatabase.doc(dataID).set(data);
+            };
+          </script>
       </div>
     </section>
     <section id="competitions-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
@@ -196,7 +189,7 @@ If no profile or bib number yet redirect to profile page
                   </tr>
               </thead>
               <tbody id="competitionTable" align="center" contenteditable="true">
-                  <tr>
+                  <!--<tr>
                     <td contenteditable="true"><input type="date" value="2024-06-01"></td>
                     <td contenteditable="true"><input type="time" value="12:00"></td>
                     <td contenteditable="true"><input type="text" list="CompetitionsList_options" value="Swimming" onchange="getRowData(this.closest('tr'))"></td>
@@ -213,7 +206,7 @@ If no profile or bib number yet redirect to profile page
                     <td contenteditable="true"><input type="time" value="16:00"></td>
                     <td contenteditable="true">Jumping</td>
                     <td contenteditable="true">Heat 3</td>
-                </tr>
+                </tr>-->
               </tbody>
           </table>
           <div align="right">
@@ -222,13 +215,22 @@ If no profile or bib number yet redirect to profile page
           <datalist id="CompetitionsList_options">
           </datalist>
           <script type="text/javascript">
-            function saveCompetition(data) {
+            async function saveCompetition(data) {
+              var hasHeats = true;
               for ( var d in data ) {
-                if ( data[d] === "" ) return;
+                if ( data[d] === "" && d === "Heats" ) hasHeats = false;
+                if ( data[d] === "" && d !== "Heats" ) return;
               }
               var dataID = data.Id;
               delete data.Id
               competitionDatabase.doc(dataID).set(data);
+
+              if ( data["Competition"] !== "" && !CompetitionsList.includes(data["Competition"]) ) {
+                settingsDatabase.doc("competitionList").set({"competitionNames":firebase.firestore.FieldValue.arrayUnion(...[data["Competition"]])}, {merge:true});
+                //documentSet("eventLists_options","get").innerHTML += await setupOptions([data["Competition"]]);
+              }
+
+              if ( hasHeats ) await setupFirebase();
             };
           </script>
       </div>
@@ -244,7 +246,7 @@ If no profile or bib number yet redirect to profile page
                   </tr>
               </thead>
               <tbody id="dancersList">
-                  <tr>
+                  <!--<tr>
                     <td>102</td>
                     <td><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
                     <td>Sarah</td>
@@ -258,7 +260,7 @@ If no profile or bib number yet redirect to profile page
                     <td>102</td>
                     <td><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
                     <td>Sarah</td>
-                </tr>
+                </tr>-->
               </tbody>
           </table>
           <!--Add Admin Panel, assign bibs-->
@@ -477,74 +479,89 @@ If no profile or bib number yet redirect to profile page
     const storage = firebase.storage();
 
     window.addEventListener("load", async function () {
-      Swal.fire({title: "Login",
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Email',
-        denyButtonText: 'Sign in Anonymously',
-        denyButtonColor: "var(--c-gray-500)",
-        cancelButtonText: 'Google',
-        cancelButtonColor: "var(--c-blue-500)",
-      }).then( async function(result) {
-        //console.log(result);
-        if (result.isConfirmed) {
-            Swal.fire({
-                title: 'Enter your email and password',
-                html:
-                    '<input type="email" id="email" class="swal2-input" placeholder="Email">' +
-                    '<input type="password" id="password" class="swal2-input" placeholder="Password">',
-                focusConfirm: false,
-                preConfirm: () => {
-                    const email = Swal.getPopup().querySelector('#email').value;
-                    const password = Swal.getPopup().querySelector('#password').value;
-                    if (!email || !password) {
-                        Swal.showValidationMessage(`Please enter email and password`);
+      await auth.onAuthStateChanged( async function(user) {
+        if (user) {
+          // User is signed in.
+          console.log("User is signed in:", user);
+          // You can now update the UI to show the user's info
+        } else {
+          // No user is signed in.
+          console.log("No user is signed in");
+          // Redirect to login page or show a login button
+          Swal.fire({title: "Login",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Email',
+            denyButtonText: 'Sign in Anonymously',
+            denyButtonColor: "var(--c-gray-500)",
+            cancelButtonText: 'Google',
+            cancelButtonColor: "var(--c-blue-500)",
+          }).then( async function(result) {
+            //console.log(result);
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Enter your email and password',
+                    html:
+                        '<input type="email" id="email" class="swal2-input" placeholder="Email">' +
+                        '<input type="password" id="password" class="swal2-input" placeholder="Password">',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const email = Swal.getPopup().querySelector('#email').value;
+                        const password = Swal.getPopup().querySelector('#password').value;
+                        if (!email || !password) {
+                            Swal.showValidationMessage(`Please enter email and password`);
+                        }
+                        return { email: email, password: password };
                     }
-                    return { email: email, password: password };
-                }
-            }).then((loginDetails) => {
-                if (loginDetails.value) {
-                    auth.signInWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
-                        .then((userCredential) => {
-                            // Signed in
-                            const user = userCredential.user;
-                            //console.log('User signed in:', user);
-                            userID = user.uid;
-                            //Swal.fire('Signed in successfully!', '', 'success');
-                        })
-                        .catch((error) => {
-                            console.error('Error signing in:', error);
-                            Swal.fire('Error signing in', error.message, 'error');
-                        });
-                }
-            });
-        } else if (result.isDenied) {
-            await auth.signInAnonymously()
-                .then((result) => {
-                    const user = result.user;
-                    userID = "test";
-                    //console.log('User signed in anonymously:', user);
-                    //Swal.fire('Signed in anonymously successfully!', '', 'success');
-                })
-                .catch((error) => {
-                    console.error('Error signing in anonymously:', error);
-                    Swal.fire('Error signing in anonymously', error.message, 'error');
+                }).then((loginDetails) => {
+                    if (loginDetails.value) {
+                        auth.signInWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
+                            .then((userCredential) => {
+                                // Signed in
+                                const user = userCredential.user;
+                                //console.log('User signed in:', user);
+                                //userID = user.uid;
+                                //Swal.fire('Signed in successfully!', '', 'success');
+                            })
+                            .catch((error) => {
+                                console.error('Error signing in:', error);
+                                Swal.fire('Error signing in', error.message, 'error');
+                            });
+                    }
                 });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    const user = result.user;
-                    userID = user.uid;
-                    //console.log('User signed in with Google:', user);
-                    //Swal.fire('Signed in with Google successfully!', '', 'success');
-                })
-                .catch((error) => {
-                    console.error('Error signing in with Google:', error);
-                    Swal.fire('Error signing in with Google', error.message, 'error');
-                });
-      }
-      await setupFirebase();
-      //Login and setup profile
+            } else if (result.isDenied) {
+                await auth.signInAnonymously()
+                    .then((result) => {
+                        const user = result.user;
+                        //userID = "test";
+                        //console.log('User signed in anonymously:', user);
+                        //Swal.fire('Signed in anonymously successfully!', '', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in anonymously:', error);
+                        Swal.fire('Error signing in anonymously', error.message, 'error');
+                    });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                auth.signInWithPopup(provider)
+                    .then((result) => {
+                        const user = result.user;
+                        //userID = user.uid;
+                        //console.log('User signed in with Google:', user);
+                        //Swal.fire('Signed in with Google successfully!', '', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in with Google:', error);
+                        Swal.fire('Error signing in with Google', error.message, 'error');
+                    });
+          }
+          //await setupFirebase();
+          //Login and setup profile
+          firstLogin = true;
+          });
+        }
+        userID = user.uid;
+        if ( user.isAnonymous ) userID = "test";
+        await setupFirebase();
       });
     });
 
@@ -571,7 +588,7 @@ If no profile or bib number yet redirect to profile page
       console.log(userID);
       var myProfile = await getFirebase(dancersDatabase , userID);//dancersDatabase.doc(userID).get()
       console.log(myProfile);
-      if ( myProfile === [] || readObject(myProfile,"Name") === "" ) documentSet("profile-tab","click");
+      if ( ( myProfile === [] || readObject(myProfile,"Name") === "" ) && firstLogin ) documentSet("profile-tab","click");
       documentSet("profileAvatar","src",readObject(myProfile,"Profile"));
       documentSet("profileImage","src",readObject(myProfile,"Profile"));
       documentSet("dancersName","value",readObject(myProfile,"Name"));
@@ -581,9 +598,48 @@ If no profile or bib number yet redirect to profile page
 
       await loadDancerList();
 
+
+      allDancers = {};
+      allDancers_list = {};
+      var allDancers_data = await getFirebase(dancersDatabase,{field:"Current Event",query:"==",input:myEvent});
+      console.log(allDancers_data);
+      for ( var d in allDancers_data ) {
+        var dancerData = allDancers_data[d];
+        allDancers[dancerData.Id] = dancerData;
+        if ( dancerData.Name !== undefined ) allDancers_list[dancerData.Id] = readObject(dancerData,"Name");
+      }
+      documentSet("dancersList_options","innerHTML",await setupOptions(allDancers_list,"private","",true));
+      console.log(allDancers);
+
+
+      var dancerSearchValues = documentSet("dancerSearch","get","value").trim();
+      if ( dancerSearchValues === undefined ) dancerSearchValues = "";
+      dancerSearchValues = cleanArray(dancerSearchValues.split(","));
+      console.log(dancerSearchValues);
+
+      var dancerSearchKeys = [];
+
+      if ( dancerSearchValues.length > 0 ) {
+        for ( var v in dancerSearchValues ) {
+          var dancerOption = document.querySelector(`datalist#dancersList_options option[value="`+dancerSearchValues[v]+`"]`);
+          dancerOption = dancerOption.getAttribute('data-value');
+          dancerOption = dancerOption !== null ? dancerOption.trim() : "";
+          dancerSearchKeys.push(dancerOption)
+        }
+      }
+
+      console.log(dancerSearchKeys);
+      var dancerOnly = false;
+      var filmerOnly = false;
+      var searchBoth = (dancerOnly === filmerOnly);
+
+
+      allCompetitions = {};
+      competitionOptions = {};
+
       documentSet("competitionTable","innerHTML","");
       competitionsData = await getFirebase(competitionDatabase,{field:"Event",query:"==",input:myEvent});
-      competitionsData.sort((a, b) => {
+      competitionsData = competitionsData.sort((a, b) => {
           // Compare Dates
           if (a.Date < b.Date) return -1;
           if (a.Date > b.Date) return 1;
@@ -596,9 +652,9 @@ If no profile or bib number yet redirect to profile page
           if (a.Heat < b.Heat) return -1;
           if (a.Heat > b.Heat) return 1;
 
-          // Dates, Times, and Heats are equal, compare Names
-          if (a.Name < b.Name) return -1;
-          if (a.Name > b.Name) return 1;
+          // Dates, Times, and Heats are equal, compare Competition
+          if (a.Competition < b.Competition) return -1;
+          if (a.Competition > b.Competition) return 1;
 
           // All fields are equal
           return 0;
@@ -606,25 +662,86 @@ If no profile or bib number yet redirect to profile page
       console.log(competitionsData);
 
       for ( var c in competitionsData ) {
-        addCompetition(competitionsData[c]);
+        var competitionData = competitionsData[c];
+        allCompetitions[competitionData.Id] = competitionData;
+        addCompetition(competitionData);
+        for (let cH = 1; cH <= competitionData.Heats; cH++) {
+          competitionOptions[competitionData.Id+"H"+cH] = readObject(competitionData,"Competition")+" Heat "+cH;
+        }
+      }
+      console.log(competitionOptions);
+      documentSet("competitionHeat_options","innerHTML",await setupOptions(competitionOptions,"private","",true));
+
+
+      var heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
+      console.log(heatSchedule);
+      if ( dancerSearchKeys.length > 0 ) {
+        if ( searchBoth ) {
+          heatSchedule = heatSchedule.filter(function (row) {
+            return dancerSearchKeys.includes(readObject(row,"Dancer")) || dancerSearchKeys.includes(readObject(row,"Filmer"));
+          });
+        } else if ( dancerOnly ) {
+          heatSchedule = heatSchedule.filter(function (row) {
+            return dancerSearchKeys.includes(readObject(row,"Dancer"));
+          });
+
+        } else if ( filmerOnly ) {
+          heatSchedule = heatSchedule.filter(function (row) {
+            return dancerSearchKeys.includes(readObject(row,"Filmer"));
+          });
+
+        }
+      }
+      console.log(heatSchedule);
+      documentSet("heatTable","innerHTML","");
+
+
+      for ( var h in heatSchedule ) {
+        var scheduleData = heatSchedule[h];
+        console.log(scheduleData);
+        var competitionID = scheduleData.Competition.substring(0,8);
+        var competitionData = allCompetitions[competitionID];
+        console.log(competitionData);
+        heatSchedule[h].Date = competitionData.Date;
+        heatSchedule[h].Time = competitionData.Time;
+        heatSchedule[h].Heats = competitionData.Heats;
+      }
+      console.log("heatSchedule");
+      heatSchedule = heatSchedule.sort((a, b) => {
+          // Compare Dates
+          if (a.Date < b.Date) return -1;
+          if (a.Date > b.Date) return 1;
+
+          // Dates are equal, compare Times
+          if (a.Time < b.Time) return -1;
+          if (a.Time > b.Time) return 1;
+
+          // Dates and Times are equal, compare Heats
+          if (a.Heat < b.Heat) return -1;
+          if (a.Heat > b.Heat) return 1;
+
+          // Dates, Times, and Heats are equal, compare Competition
+          if (a.Competition < b.Competition) return -1;
+          if (a.Competition > b.Competition) return 1;
+
+          // Compare Dancer Name
+          if (a.Dancer < b.Dancer) return -1;
+          if (a.Dancer > b.Dancer) return 1;
+
+          // Compare Filmer Name
+          if (a.Filming < b.Filming) return -1;
+          if (a.Filming > b.Filming) return 1;
+
+          // All fields are equal
+          return 0;
+      });
+      console.log(heatSchedule);
+
+      for ( var h in heatSchedule ) {
+        addHeat(heatSchedule[h]);
       }
 
-
-
-
-
-
-
-      /*.then((doc) => {
-        console.log("Document successfully got!");
-        if ( doc.exists ) {
-          console.log(doc.data());
-          myProfile = doc.data();
-        }
-      })
-      .catch((error) => {
-        console.error("Error getting document: ", error);
-      });*/
+      firstLogin = false;
     }
 
     async function loadDancerList() {
@@ -650,16 +767,39 @@ If no profile or bib number yet redirect to profile page
         `;
       }
 
-      if ( myBib === "" ) documentSet("profile-tab","click");
+      if ( myBib === "" && firstLogin  ) documentSet("profile-tab","click");
     }
+
+
+    function addHeat(heatData) {
+      console.log(heatData);
+      var heatName = readObject(competitionOptions,readObject(heatData,"Competition"));
+      var dancerData = readObject(allDancers,readObject(heatData,"Dancer"),{});
+      if ( heatData === undefined ) {
+        heatName = "";
+        dancerData = readObject(allDancers,userID,{});
+      }
+      var Dancer = readObject(dancerData,"Name");
+      var filmerData = readObject(allDancers,readObject(heatData,"Filming"),{});
+      var Filmer = readObject(filmerData,"Name");
+      documentSet("heatTable","insertAdjacentHTML",`
+          <tr>
+              <td><input type="text" value="`+heatName+`" onchange="saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="width: -webkit-fill-available;text-align: center;"></td>
+              <td><input type="text" value="`+Dancer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="width: -webkit-fill-available;text-align: center;"></td>
+              <td><input type="text" value="`+Filmer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="width: -webkit-fill-available;text-align: center;"></td>
+              <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
+              <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
+          </tr>
+      `);
+    };
 
     function addCompetition(competitionData) {
       documentSet("competitionTable","insertAdjacentHTML",`
             <tr>
               <td><input type="date" value="`+new Date(readObject(competitionData,"Date",new Date())).toJSON().slice(0,10)+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
               <td><input type="time" value="`+readObject(competitionData,"Time")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
-              <td><input type="text" style="text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
-              <td><input type="number" style="text-align:center;" value="`+readObject(competitionData,"Heat")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="text" style="width: -webkit-fill-available;text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="number" style="width: -webkit-fill-available;text-align:center;" value="`+readObject(competitionData,"Heats")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
               <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
           </tr>
@@ -724,7 +864,14 @@ If no profile or bib number yet redirect to profile page
     }
 
     async function setupOptions(data , key , textField , sort) {
-      //console.log(data)
+      var options = "";
+      if (key === "private" && typeof data === "object") {
+        for (const objKey in data) {
+            options += `<option value="${data[objKey]}" data-value="${objKey}">${data[objKey]}</option>`;
+        }
+        return options;
+      }
+      //console.log(data);
       var array = Array.isArray(data);
       var values = data;
       var dataOptions = data;
@@ -761,8 +908,9 @@ If no profile or bib number yet redirect to profile page
           values = values.reverse();
         };
       };
+
+      //console.log(values);
       
-      var options = "";
       for ( var v in values ) {
         var value = values[v];
         if ( array ) {
@@ -959,7 +1107,13 @@ If no profile or bib number yet redirect to profile page
             //console.log(cell);
             const input = cell.querySelector('input');
             if (input) {
-                rowData[header] = input.value.trim();
+              const selectedOption = document.querySelector(`datalist#${input.getAttribute('list')} option[value="${input.value}"]`);
+              if (selectedOption) {
+                  const dataValue = selectedOption.getAttribute('data-value');
+                  rowData[header] = dataValue !== null ? dataValue.trim() : input.value.trim();
+              } else {
+                  rowData[header] = input.value.trim();
+              }
             } else {
                 rowData[header] = cell.innerText.trim();
             }
