@@ -178,9 +178,6 @@
           </table>
           <datalist id="competitionHeat_options">
           </datalist>
-          <div align="right">
-            <p style="width: 350px;text-align: right;" onclick="addHeat()"><span class="fa fa-plus"></span>Add new Filming Schedule</p>
-          </div>
           <script type="text/javascript">
             function saveHeat(data) {
               for ( var d in data ) {
@@ -191,6 +188,9 @@
               scheduleDatabase.doc(dataID).set(data);
             };
           </script>
+      </div>
+      <div align="right">
+        <p style="width: 350px;text-align: right;" onclick="addHeat()"><span class="fa fa-plus"></span>Add new Filming Schedule</p>
       </div>
     </section>
     <section id="competitions-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
@@ -227,9 +227,6 @@
                 </tr>-->
               </tbody>
           </table>
-          <div align="right">
-            <p style="width: 200px;text-align: right;" onclick="addCompetition()"><span class="fa fa-plus"></span>Add new Competition</p>
-          </div>
           <datalist id="CompetitionsList_options">
           </datalist>
           <script type="text/javascript">
@@ -251,6 +248,9 @@
               if ( hasHeats ) await setupFirebase();
             };
           </script>
+      </div>
+      <div align="right">
+        <p style="width: 200px;text-align: right;" onclick="addCompetition()"><span class="fa fa-plus"></span>Add new Competition</p>
       </div>
     </section>
     <section id="dancers-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
