@@ -34,7 +34,7 @@
   
 </head>
 
-<body style="width:90%;">
+<body style="width:95%;" align="center">
   <div class="phone-container" align="center">
   <div class="phone">
     <header class="header" style="width:100%;">
@@ -67,7 +67,7 @@
         <button class="search-button">
           <i class="ai-search" style="color:var(--c-blue-500);"></i>
         </button>
-        <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase();" placeholder="Search Dancer" />
+        <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase();" onfocus="hideDancers(false)" placeholder="Search Dancer" />
         <datalist id="dancersList_options">
         </datalist>
       </div>
@@ -187,46 +187,61 @@
                 // Check if the focused element is an input element
                 if (event.target.tagName.toLowerCase() === 'input') {
                     // Check if the input has the datalist "dancersList_options"
-                    var dataListId = event.target.getAttribute('list');
-                    if (dataListId === 'dancersList_options') {
+                    //var dataListId = event.target.getAttribute('list');
+                    //if (dataListId === 'dancersList_options') {
+                    var nameID = event.target.getAttribute('name');
+                    if (nameID === 'Filmer') {
                         // Perform your action here
                         //console.log('Input with dancersList_options gained focus');
                         hideDancers(event.target.closest("tr"));
+                    } else {
+                      hideDancers(false);
                     }
                 }
             });
 
             function hideDancers(tRow) {
-                var rowDate = getRowData(tRow);
-                console.log(rowDate);
-                var competitionValue = rowDate.Competition;
-                console.log(competitionValue);
+                var checkDancers = [];
+                if ( tRow !== false ) {
+                    var rowDate = getRowData(tRow);
+                    //console.log(rowDate);
+                    var competitionValue = rowDate.Competition;
+                    //console.log(competitionValue);
 
+                    var competitionList = document.getElementById('competitionHeat_options');
+                    var toRemove = false;
+                    var competitionArray = [];
+                    Array.from(competitionList.options).forEach(function(option) {
+                      var optionValue = option.getAttribute('data-value')
+                      optionValue = optionValue !== null ? optionValue.trim() : "";
+                      console.log(optionValue);
+                      if ( toRemove ) {
+                        competitionArray.push(optionValue);
+                        toRemove = false;
+                      }
+                      if ( optionValue === competitionValue ) {
+                        competitionArray.push(optionValue);
+                        toRemove = true;
+                      }
+                    });
+                    console.log(competitionArray);
 
-
-                var competitionList = document.getElementById('competitionHeat_options');
-                var toRemove = false;
-                var competitionArray = [];
-                Array.from(competitionList.options).forEach(function(option) {
-                  var optionValue = option.getAttribute('data-value')
-                  optionValue = optionValue !== null ? optionValue.trim() : "";
-                  console.log(optionValue);
-                  if ( optionValue !== competitionValue && !toRemove ) competitionArray.push(optionValue);
-                  if ( toRemove ) toRemove = false;
-                  if ( optionValue === competitionValue ) toRemove = true;
-                });
-                console.log(competitionArray);
-
-                var checkDancers = jQuery.extend(true, [], allDancers).filter(function (row) {
-                  return competitionArray.includes(row.Competition);
-                });
+                    var dancerHeats = jQuery.extend(true, [], heatSchedule).filter(function (row) {
+                      return competitionArray.includes(row.Competition);
+                    });
+                    console.log(dancerHeats);
+                    for ( var d in dancerHeats ) {
+                      checkDancers.push(readObject(dancerHeats[d],"Dancer"));
+                    }
+                }
+                checkDancers = cleanArray(checkDancers);
                 console.log(checkDancers);
 
 
                 // Get the datalist associated with the input
                 var dataList = document.getElementById('dancersList_options');
                 // Get the value of the input
-                var inputValue = event.target.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+                //var inputValue = event.target.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
 
 
                 // Iterate through each option in the datalist
@@ -235,26 +250,31 @@
                     //var optionValue = option.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
                     var optionValue = option.getAttribute('data-value')
                     optionValue = optionValue !== null ? optionValue.trim() : "";
-                    console.log(optionValue);
+                    //console.log(optionValue);
+
+                    option.removeAttribute('disabled'); // Show the option
 
                     // Check the information and hide specific options based on your criteria
-                    if ( checkDancers.includes(optionValue) ) {
-                        option.disabled = 'false'; // Hide the option
+                    if ( tRow === false ) {
+                        option.removeAttribute('disabled'); // Show the option
+                    } else if ( !checkDancers.includes(optionValue) ) {
+                        option.removeAttribute('disabled'); // Show the option
                     } else {
-                        option.disabled = 'true'; // Show the option
+                        option.disabled = 'true'; // Hide the option
                     }
                 });
             }
 
-
-
-            function saveHeat(data) {
+            async function saveHeat(data) {
               for ( var d in data ) {
                 if ( data[d] === "" && d !== "Filming" ) return;
+                if ( data[d] === "" && d !== "Dancer" ) heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
               }
               var dataID = data.Id;
               delete data.Id
-              scheduleDatabase.doc(dataID).set(data);
+              await scheduleDatabase.doc(dataID).set(data);
+
+              heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
             };
           </script>
       </div>
@@ -444,7 +464,7 @@
             //console.log(form);
 
             if ( form["Current Event"] !== "" && form["Current Event"] !== undefined && form.bibNumber !== undefined && form.bibNumber !== "" ) {
-              await settingsDatabase.doc(form["Current Event"]).set({"DancerBibs":{[form.bibNumber]:userID}}, {merge:true});
+              await settingsDatabase.doc(form["Current Event"]).set({"DancerBibs":{[userID]:form.bibNumber}}, {merge:true});
 
               await loadDancerList();
             }
@@ -775,7 +795,7 @@
       documentSet("competitionHeat_options","innerHTML",await setupOptions(competitionOptions,"private","",true));
 
 
-      var heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
+      heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
       //console.log(heatSchedule);
       if ( dancerSearchKeys.length > 0 ) {
         if ( searchBoth ) {
@@ -861,17 +881,17 @@
       dancersTable.innerHTML = "";
 
       for ( var d in dancerBibs ) {
-        var dancerData = await getFirebase(dancersDatabase,dancerBibs[d]);
-        if ( dancerBibs[d] === userID ) { documentSet("currentBib","value",d); myBib = d };
-        dancersData[dancerBibs[d]] = dancerData;
+        var dancerData = await getFirebase(dancersDatabase,d);
+        if ( d === userID ) { documentSet("currentBib","value",dancerBibs[d]); myBib = dancerBibs[d] };
+        dancersData[d] = dancerData;
         dancersTable.innerHTML += `
           <tr>
-              <td>`+d+`</td>
+              <td>`+dancerBibs[d]+`</td>
               <td><img src="`+readObject(dancerData,"Profile")+`" style="max-width: 100px;"></td>
               <td>`+readObject(dancerData,"Name")+`</td>
           </tr>
         `;
-        allDancers[dancerBibs[d]]["BIB Number"] = d;
+        allDancers[d]["BIB Number"] = d;
       }
 
       if ( myBib === "" && firstLogin  ) documentSet("profile-tab","click");
@@ -893,7 +913,7 @@
           <tr>
               <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
               <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on"  value="`+Dancer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on"  value="`+Filmer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" name="Filmer" value="`+Filmer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
               <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
           </tr>
