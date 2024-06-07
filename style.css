@@ -33,6 +33,27 @@
   	padding-bottom: 5vw;
   	background-color: var(--c-gray-400);
   }
+
+  /* Media query for screens with width less than 900px */
+  @media (max-width: 900px) {
+      body {
+          font-size: 14px; /* Reduce font size for smaller screens */
+      }
+
+      h1 {
+          font-size: 1.8em; /* Adjust font size for smaller screens */
+      }
+
+      h2 {
+          font-size: 1.2em; /* Adjust font size for smaller screens */
+      }
+
+      p {
+          font-size: 0.9em; /* Adjust font size for smaller screens */
+      }
+
+      /* Adjust other elements as needed */
+  }
   
   img {
   	display: block;
