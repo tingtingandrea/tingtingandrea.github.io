@@ -354,7 +354,7 @@
       </div>
     </section>
     <section id="profile-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
-        <img id="profileImage" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" alt="Profile Image" style="display: inline;max-width: 150px;">
+        <img id="profileImage" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" alt="Select Profile Image" style="display: inline;max-width: 150px;font-weight: bold;font-size: 10px;">
         <input type="file" id="imageInput" style="display: none;" accept="image/*">
         <button id="changeImageButton" class="fa fa-camera" style="display: inline;background-color: #ec088c;border-color: #ec088c;color: white;border-radius: 20px;padding: 10px;"></button><br><br>
         <script type="text/javascript">
@@ -459,6 +459,7 @@
             Swal.fire({
               title: "Profile Saved."
             });
+            if ( firstLogin ) setupFirebase();
           }
         </script>
         <!--Ability to claim anoyomous profiles-->
@@ -570,11 +571,11 @@
       await auth.onAuthStateChanged( async function(user) {
         if (user) {
           // User is signed in.
-          //console.log("User is signed in:", user);
+          console.log("User is signed in:", user);
           // You can now update the UI to show the user's info
         } else {
           // No user is signed in.
-          //console.log("No user is signed in");
+          console.log("No user is signed in");
           // Redirect to login page or show a login button
           Swal.fire({title: "Login",
             showDenyButton: true,
@@ -684,6 +685,7 @@
       myEvent = readObject(myProfile,"Current Event");
       documentSet("currentEvent","value",myEvent);
 
+      if ( myProfile === [] ) return;
 
       allDancers = {};
       allDancers_list = {};
