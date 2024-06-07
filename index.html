@@ -66,14 +66,14 @@
         <button class="search-button">
           <i class="ai-search" style="color:var(--c-blue-500);"></i>
         </button>
-        <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase()" placeholder="Search Dancer" />
+        <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase();" placeholder="Search Dancer" />
         <datalist id="dancersList_options">
         </datalist>
       </div>
     </section>
     <section class="" style="display:flex;margin: 10px 15px;width:100%;align-items: center;justify-content: center;">
       <article class="card horizontal" style="width:40%;max-width: 200px;">
-        <div class="card-inner" style="padding: 0px;padding-left: 30;">
+        <div class="card-inner" style="padding: 0px;padding-left: 30;" onclick="selectCheckbox(this,'dancerOnly_checkbox');">
           <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);"></span>
           <div class="card-image" style="width:40px;height:40px;">
             <p style="transform: scale(1.5);text-align: center;">💃🏻🕺</p>
@@ -88,9 +88,10 @@
           </div>
           <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);left: calc(100% - 5px);top: calc(100% - 5px);"></span>
         </div>
+        <input id="dancerOnly_checkbox" style="display: none;" value=true>
       </article>
       <article class="card horizontal" style="width:40%;max-width: 200px;">
-        <div class="card-inner" style="padding: 0px;padding-left: 30;">
+        <div class="card-inner" style="padding: 0px;padding-left: 30;" onclick="selectCheckbox(this,'filmingOnly_checkbox');">
           <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);"></span>
           <div class="card-image" style="width:40px;height:40px;">
             <p style="transform: scale(1.5);text-align: center;">🎥</p>
@@ -105,7 +106,24 @@
           </div>
           <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);left: calc(100% - 5px);top: calc(100% - 5px);"></span>
         </div>
+        <input id="filmingOnly_checkbox" style="display: none;" value=true>
       </article>
+
+      <script type="text/javascript">
+        function selectCheckbox(button,id) {
+          var checked = documentSet(id,"get","checked");
+          console.log(checked);
+          if ( checked ) {
+            documentSet(id,"checked",false);
+            documentSet(button,"classRemove","active");
+          } else {
+            documentSet(id,"checked",true);
+            documentSet(button,"classAdd","active");
+          }
+
+          if ( documentSet("dancerSearch","get","value").trim() !== "" ) setupFirebase();
+        }
+      </script>
 
       <!--<div style="background-color: #ec008c;border-radius: 20px;width: 200px;">
         <input type="checkbox" class="search-input" style="width: 15px;" placeholder="Search Music" />
@@ -629,8 +647,8 @@
       }
 
       console.log(dancerSearchKeys);
-      var dancerOnly = false;
-      var filmerOnly = false;
+      var dancerOnly = documentSet("dancerOnly_checkbox","get","checked");
+      var filmerOnly = documentSet("filmingOnly_checkbox","get","checked");
       var searchBoth = (dancerOnly === filmerOnly);
 
 
@@ -678,7 +696,7 @@
       if ( dancerSearchKeys.length > 0 ) {
         if ( searchBoth ) {
           heatSchedule = heatSchedule.filter(function (row) {
-            return dancerSearchKeys.includes(readObject(row,"Dancer")) || dancerSearchKeys.includes(readObject(row,"Filmer"));
+            return dancerSearchKeys.includes(readObject(row,"Dancer")) || dancerSearchKeys.includes(readObject(row,"Filming"));
           });
         } else if ( dancerOnly ) {
           heatSchedule = heatSchedule.filter(function (row) {
@@ -687,7 +705,7 @@
 
         } else if ( filmerOnly ) {
           heatSchedule = heatSchedule.filter(function (row) {
-            return dancerSearchKeys.includes(readObject(row,"Filmer"));
+            return dancerSearchKeys.includes(readObject(row,"Filming"));
           });
 
         }
