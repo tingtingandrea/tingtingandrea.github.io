@@ -38,8 +38,11 @@
   /* Media query for screens with width less than 900px */
   @media (max-width: 900px) {
       body {
+          font-size: 12px; /* Reduce font size for smaller screens */
+      }
+      
+      .phone {
           width:85%;
-          font-size: 14px; /* Reduce font size for smaller screens */
       }
 
       h1 {
@@ -71,8 +74,11 @@
 
   @media (max-width: 500px) {
       body {
-          width:85%;
           font-size: 12px; /* Reduce font size for smaller screens */
+      }
+      
+      .phone {
+          width:85%;
       }
 
       h1 {
