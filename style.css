@@ -54,6 +54,32 @@
 
       .navigation-item {
           font-size: 0.9em; /* Adjust font size for smaller screens */
+
+      }
+
+      /* Adjust other elements as needed */
+  }
+
+
+  @media (max-width: 500px) {
+      body {
+          font-size: 12px; /* Reduce font size for smaller screens */
+      }
+
+      h1 {
+          font-size: 1.4em; /* Adjust font size for smaller screens */
+      }
+
+      h2 {
+          font-size: 0.9em; /* Adjust font size for smaller screens */
+      }
+
+      p {
+          font-size: 0.7em; /* Adjust font size for smaller screens */
+      }
+
+      .navigation-item {
+          font-size: 0.7em; /* Adjust font size for smaller screens */
         
       }
 
