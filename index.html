@@ -120,6 +120,7 @@
             documentSet(id,"checked",true);
             documentSet(button,"classAdd","active");
           }
+          this.blur();
 
           if ( documentSet("dancerSearch","get","value").trim() !== "" ) setupFirebase();
         }
