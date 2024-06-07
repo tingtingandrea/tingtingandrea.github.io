@@ -76,7 +76,7 @@
       body {
           font-size: 12px; /* Reduce font size for smaller screens */
       }
-      
+
       .phone {
           width:85%;
       }
@@ -115,6 +115,10 @@
   input,
   button {
   	font: inherit;
+  }
+
+  .phone-container {
+    width: 95%;
   }
   
   .phone {
