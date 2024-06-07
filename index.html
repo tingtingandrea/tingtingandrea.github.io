@@ -113,7 +113,7 @@
       <script type="text/javascript">
         function selectCheckbox(button,id) {
           var checked = documentSet(id,"get","checked");
-          console.log(checked);
+          //console.log(checked);
           if ( checked ) {
             documentSet(id,"checked",false);
             documentSet(button,"classRemove","active");
@@ -181,6 +181,73 @@
           <datalist id="competitionHeat_options">
           </datalist>
           <script type="text/javascript">
+            // Listen for input focus event
+            // Add event listener to tbody to listen for focus event
+            document.getElementById('heatTable').addEventListener('focusin', function(event) {
+                // Check if the focused element is an input element
+                if (event.target.tagName.toLowerCase() === 'input') {
+                    // Check if the input has the datalist "dancersList_options"
+                    var dataListId = event.target.getAttribute('list');
+                    if (dataListId === 'dancersList_options') {
+                        // Perform your action here
+                        //console.log('Input with dancersList_options gained focus');
+                        hideDancers(event.target.closest("tr"));
+                    }
+                }
+            });
+
+            function hideDancers(tRow) {
+                var rowDate = getRowData(tRow);
+                console.log(rowDate);
+                var competitionValue = rowDate.Competition;
+                console.log(competitionValue);
+
+
+
+                var competitionList = document.getElementById('competitionHeat_options');
+                var toRemove = false;
+                var competitionArray = [];
+                Array.from(competitionList.options).forEach(function(option) {
+                  var optionValue = option.getAttribute('data-value')
+                  optionValue = optionValue !== null ? optionValue.trim() : "";
+                  console.log(optionValue);
+                  if ( optionValue !== competitionValue && !toRemove ) competitionArray.push(optionValue);
+                  if ( toRemove ) toRemove = false;
+                  if ( optionValue === competitionValue ) toRemove = true;
+                });
+                console.log(competitionArray);
+
+                var checkDancers = jQuery.extend(true, [], allDancers).filter(function (row) {
+                  return competitionArray.includes(row.Competition);
+                });
+                console.log(checkDancers);
+
+
+                // Get the datalist associated with the input
+                var dataList = document.getElementById('dancersList_options');
+                // Get the value of the input
+                var inputValue = event.target.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+
+
+                // Iterate through each option in the datalist
+                Array.from(dataList.options).forEach(function(option) {
+                    // Get the option's value
+                    //var optionValue = option.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+                    var optionValue = option.getAttribute('data-value')
+                    optionValue = optionValue !== null ? optionValue.trim() : "";
+                    console.log(optionValue);
+
+                    // Check the information and hide specific options based on your criteria
+                    if ( checkDancers.includes(optionValue) ) {
+                        option.disabled = 'false'; // Hide the option
+                    } else {
+                        option.disabled = 'true'; // Show the option
+                    }
+                });
+            }
+
+
+
             function saveHeat(data) {
               for ( var d in data ) {
                 if ( data[d] === "" && d !== "Filming" ) return;
@@ -325,7 +392,7 @@
                           // Handle successful uploads on complete
                           try {
                               const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                              console.log('File available at', downloadURL);
+                              //console.log('File available at', downloadURL);
                               
                               // Save image ID to Firestore under "dancers/test/Profile"
                               await dancersDatabase.doc(userID).set({Profile:downloadURL},{merge:true});/*.collection('Profile').add({
@@ -334,7 +401,7 @@
                                   timestamp: firebase.firestore.FieldValue.serverTimestamp()
                               });*/
 
-                              console.log('Image ID saved to Firestore!');
+                              //console.log('Image ID saved to Firestore!');
                               //document.getElementById('message').innerText = 'Image uploaded and ID saved to Firestore!';
                           } catch (error) {
                               console.error('Error saving image ID to Firestore:', error);
@@ -374,7 +441,7 @@
             });
             Swal.showLoading();
             form = $("#"+form.id).serializeJSON();
-            console.log(form);
+            //console.log(form);
 
             if ( form["Current Event"] !== "" && form["Current Event"] !== undefined && form.bibNumber !== undefined && form.bibNumber !== "" ) {
               await settingsDatabase.doc(form["Current Event"]).set({"DancerBibs":{[form.bibNumber]:userID}}, {merge:true});
@@ -502,11 +569,11 @@
       await auth.onAuthStateChanged( async function(user) {
         if (user) {
           // User is signed in.
-          console.log("User is signed in:", user);
+          //console.log("User is signed in:", user);
           // You can now update the UI to show the user's info
         } else {
           // No user is signed in.
-          console.log("No user is signed in");
+          //console.log("No user is signed in");
           // Redirect to login page or show a login button
           Swal.fire({title: "Login",
             showDenyButton: true,
@@ -580,7 +647,7 @@
           });
         }
         userID = user.uid;
-        if ( user.isAnonymous ) userID = "test";
+        //if ( user.isAnonymous ) userID = "test";
         await setupFirebase();
       });
     });
@@ -590,13 +657,13 @@
       settingsDatabase = db.collection("Settings");
       eventsList = await getFirebase(settingsDatabase,"eventsList");
       eventsList = eventsList.events;
-      console.log(eventsList);
+      //console.log(eventsList);
       documentSet(eventLists_options,"innerHTML",await setupOptions(eventsList));
       //bib assignments (1 doc per event)
 
       CompetitionsList = await getFirebase(settingsDatabase,"competitionList");
       CompetitionsList = CompetitionsList.competitionNames;
-      console.log(CompetitionsList);
+      //console.log(CompetitionsList);
       documentSet(CompetitionsList_options,"innerHTML",await setupOptions(CompetitionsList));
       dancersDatabase = db.collection("Dancers");
       //Profiles
@@ -605,9 +672,9 @@
       scheduleDatabase = db.collection("Heats");
       //Full schedule itemized
 
-      console.log(userID);
+      //console.log(userID);
       var myProfile = await getFirebase(dancersDatabase , userID);//dancersDatabase.doc(userID).get()
-      console.log(myProfile);
+      //console.log(myProfile);
       if ( ( myProfile === [] || readObject(myProfile,"Name") === "" ) && firstLogin ) documentSet("profile-tab","click");
       documentSet("profileAvatar","src",readObject(myProfile,"Profile"));
       documentSet("profileImage","src",readObject(myProfile,"Profile"));
@@ -620,14 +687,14 @@
       allDancers = {};
       allDancers_list = {};
       var allDancers_data = await getFirebase(dancersDatabase,{field:"Current Event",query:"==",input:myEvent});
-      console.log(allDancers_data);
+      //console.log(allDancers_data);
       for ( var d in allDancers_data ) {
         var dancerData = allDancers_data[d];
         allDancers[dancerData.Id] = dancerData;
         if ( dancerData.Name !== undefined ) allDancers_list[dancerData.Id] = readObject(dancerData,"Name");
       }
       documentSet("dancersList_options","innerHTML",await setupOptions(allDancers_list,"private","",true));
-      console.log(allDancers);
+      //console.log(allDancers);
 
       await loadDancerList();
 
@@ -635,7 +702,7 @@
       var dancerSearchValues = documentSet("dancerSearch","get","value").trim();
       if ( dancerSearchValues === undefined ) dancerSearchValues = "";
       dancerSearchValues = cleanArray(dancerSearchValues.split(","));
-      console.log(dancerSearchValues);
+      //console.log(dancerSearchValues);
 
       var dancerSearchKeys = [];
 
@@ -648,7 +715,7 @@
         }
       }
 
-      console.log(dancerSearchKeys);
+      //console.log(dancerSearchKeys);
       var dancerOnly = documentSet("dancerOnly_checkbox","get","checked");
       var filmerOnly = documentSet("filmingOnly_checkbox","get","checked");
       var searchBoth = (dancerOnly === filmerOnly);
@@ -679,7 +746,7 @@
           // All fields are equal
           return 0;
       });
-      console.log(competitionsData);
+      //console.log(competitionsData);
 
       for ( var c in competitionsData ) {
         var competitionData = competitionsData[c];
@@ -689,12 +756,12 @@
           competitionOptions[competitionData.Id+"H"+cH] = readObject(competitionData,"Competition")+" Heat "+cH;
         }
       }
-      console.log(competitionOptions);
+      //console.log(competitionOptions);
       documentSet("competitionHeat_options","innerHTML",await setupOptions(competitionOptions,"private","",true));
 
 
       var heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
-      console.log(heatSchedule);
+      //console.log(heatSchedule);
       if ( dancerSearchKeys.length > 0 ) {
         if ( searchBoth ) {
           heatSchedule = heatSchedule.filter(function (row) {
@@ -712,17 +779,17 @@
 
         }
       }
-      console.log(heatSchedule);
+      //console.log(heatSchedule);
       documentSet("heatTable","innerHTML","");
 
 
       var notificationBell = 0;
       for ( var h in heatSchedule ) {
         var scheduleData = heatSchedule[h];
-        console.log(scheduleData);
+        //console.log(scheduleData);
         var competitionID = scheduleData.Competition.substring(0,8);
         var competitionData = allCompetitions[competitionID];
-        console.log(competitionData);
+        //console.log(competitionData);
         heatSchedule[h].Date = competitionData.Date;
         heatSchedule[h].Time = competitionData.Time;
         heatSchedule[h].Heats = competitionData.Heats;
@@ -730,7 +797,7 @@
       }
       documentSet(":root","--notification-bell", `"`+notificationBell+`"`);
 
-      console.log("heatSchedule");
+      //console.log("heatSchedule");
       heatSchedule = heatSchedule.sort((a, b) => {
           // Compare Dates
           if (a.Date < b.Date) return -1;
@@ -759,7 +826,7 @@
           // All fields are equal
           return 0;
       });
-      console.log(heatSchedule);
+      //console.log(heatSchedule);
 
       for ( var h in heatSchedule ) {
         addHeat(heatSchedule[h]);
@@ -770,10 +837,10 @@
 
     async function loadDancerList() {
       eventData = await getFirebase(settingsDatabase , myEvent);
-      console.log(eventData);
+      //console.log(eventData);
 
       var dancerBibs = readObject(eventData,"DancerBibs",{});
-      console.log(dancerBibs);
+      //console.log(dancerBibs);
 
       var dancersTable = documentSet("dancersList","get");
       dancersTable.innerHTML = "";
@@ -797,7 +864,7 @@
 
 
     function addHeat(heatData) {
-      console.log(heatData);
+      //console.log(heatData);
       var heatName = readObject(competitionOptions,readObject(heatData,"Competition"));
       var dancerData = readObject(allDancers,readObject(heatData,"Dancer"),{});
       if ( heatData === undefined ) {
@@ -821,7 +888,7 @@
     function displayInfo(id) {
       var displayData = allCompetitions[id];
       if ( displayData === undefined ) displayData = allDancers[id];
-      console.log(displayData);
+      //console.log(displayData);
 
       if ( displayData === undefined ) return;
 
@@ -1111,7 +1178,7 @@
         }
         return doc[setting] = value;
       } catch (err) {
-        console.log(err);
+        //console.log(err);
         return;
       }
     }
@@ -1159,12 +1226,12 @@
           });
           return obj;
       });
-      console.log(data);
+      //console.log(data);
       return data;
     }
 
     function getRowData(row) {
-        console.log(row);
+        //console.log(row);
         const headers = Array.from(row.closest('table').querySelectorAll('thead th'));
         const cells = Array.from(row.querySelectorAll('td'));
         
@@ -1186,7 +1253,7 @@
             }
         });
 
-        console.log(rowData);
+        //console.log(rowData);
         return rowData;
     }
 
@@ -1206,7 +1273,7 @@
         if (touchStartY < touchEndY) {
             const swipeDistance = touchEndY - touchStartY;
             if (swipeDistance > 100) { // Adjust the threshold as needed
-                console.log('Swipe down detected. Reloading...');
+                //console.log('Swipe down detected. Reloading...');
                 setupFirebase();
             }
         }
