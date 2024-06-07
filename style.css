@@ -23,6 +23,7 @@
   	--c-yellow-500: #f9bc73;
   
   	--rotation: -3deg;
+    --notification-bell: "0";
   }
   
   body {
@@ -53,8 +54,14 @@
       }
 
       .navigation-item {
-          font-size: 0.9em; /* Adjust font size for smaller screens */
+          font-size: 0.9em !important; /* Adjust font size for smaller screens */
 
+      }
+
+      .card {
+          &.horizontal {
+              transform: scale(0.9);
+          }
       }
 
       /* Adjust other elements as needed */
@@ -79,8 +86,14 @@
       }
 
       .navigation-item {
-          font-size: 0.7em; /* Adjust font size for smaller screens */
+          font-size: 0.7em !important; /* Adjust font size for smaller screens */
         
+      }
+
+      .card {
+          &.horizontal {
+              transform: scale(0.);
+          }
       }
 
       /* Adjust other elements as needed */
@@ -176,7 +189,7 @@
   	&:after {
   		right: -8px;
   		top: 3px;
-  		content: "2";
+  		content: var(--notification-bell);
   		display: flex;
   		align-items: center;
   		justify-content: center;
