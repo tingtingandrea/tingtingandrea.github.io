@@ -809,9 +809,9 @@
       var Filmer = readObject(filmerData,"Name");
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+heatName+`" onchange="saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Dancer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Filmer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Dancer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Filmer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
               <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
           </tr>
@@ -863,10 +863,10 @@
     function addCompetition(competitionData) {
       documentSet("competitionTable","insertAdjacentHTML",`
             <tr>
-              <td><input type="date" value="`+new Date(readObject(competitionData,"Date",new Date())).toJSON().slice(0,10)+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
-              <td><input type="time" value="`+readObject(competitionData,"Time")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
-              <td><input type="text" style="width: -webkit-fill-available;text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
-              <td><input type="number" style="width: -webkit-fill-available;text-align:center;" value="`+readObject(competitionData,"Heats")+`" onchange="saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="date" value="`+new Date(readObject(competitionData,"Date",new Date())).toJSON().slice(0,10)+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="time" value="`+readObject(competitionData,"Time")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="text" style="width: -webkit-fill-available;text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="number" style="width: -webkit-fill-available;text-align:center;" value="`+readObject(competitionData,"Heats")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
               <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
           </tr>
