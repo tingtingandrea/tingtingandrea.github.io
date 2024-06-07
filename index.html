@@ -807,9 +807,9 @@
       var Filmer = readObject(filmerData,"Name");
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+heatName+`" onchange="saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" style="margin-left:-15px" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Dancer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" style="margin-left:-15px" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Filmer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" style="margin-left:-15px" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+heatName+`" onchange="saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Dancer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" value="`+Filmer+`" list="dancersList_options" onchange="saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
               <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
           </tr>
