@@ -61,6 +61,10 @@
           font-size: 0.9em; /* Adjust font size for smaller screens */
       }
 
+      input {
+          font-size: 0.9em; /* Adjust font size for smaller screens */  
+      }
+
       .navigation-item {
           font-size: 0.9em !important; /* Adjust font size for smaller screens */
 
@@ -98,6 +102,10 @@
       }
 
       p {
+          font-size: 0.7em; /* Adjust font size for smaller screens */
+      }
+
+      input {
           font-size: 0.7em; /* Adjust font size for smaller screens */
       }
 
