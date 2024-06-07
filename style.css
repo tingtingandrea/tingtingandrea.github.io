@@ -624,6 +624,13 @@
   	padding-bottom: 0.5rem;
   }
   
+  .card-inner {
+      &.active {
+          background-color: var(--c-red-500);
+          color:  white;
+      }
+  }
+
   .menu-inner {
   	margin-top: 2rem;
   	display: flex;
