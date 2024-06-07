@@ -626,7 +626,7 @@
   
   .card-inner {
       &.active {
-          background-color: var(--c-red-500);
+          background-color: var(--c-red-500) !important;
           color:  white;
       }
   }
