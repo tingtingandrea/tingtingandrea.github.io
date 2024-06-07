@@ -76,6 +76,11 @@
           }
       }
 
+      .card-meta, .card-title {
+          padding: 0px;
+          margin-left: -10px;
+      }
+
       /* Adjust other elements as needed */
   }
 
@@ -118,6 +123,11 @@
           &.horizontal {
               transform: scale(0.);
           }
+      }
+
+      .card-meta, .card-title {
+          padding: 0px;
+          margin-left: -15px;
       }
 
       /* Adjust other elements as needed */
