@@ -564,7 +564,8 @@
         </a>
       </div-->
     </footer>
-    <button id="logoutButton" onclick="event.preventDefault();" style="text-decoration: :none;">Log Out</button>
+    <br>
+    <button id="logoutButton" onclick="event.preventDefault();" style="text-decoration: none !important;background: none;border: none;font-size: 10px;">Log Out</button>
   </div>
   
   <script>
@@ -716,7 +717,7 @@
         auth.signOut().then(() => {
             console.log('User signed out successfully');
             // Optionally, redirect to a different page or perform other actions
-            window.location.href = 'login.html'; // Redirect to login page
+            //window.location.href = 'login.html'; // Redirect to login page
         }).catch((error) => {
             console.error('Error signing out:', error);
         });
