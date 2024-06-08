@@ -956,8 +956,10 @@
         dancerData = readObject(allDancers,userID,{});
       }
       var Dancer = readObject(dancerData,"Name");
+      if ( Dancer === undefined || Dancer === "" ) Dancer = readObject(heatData,"Dancer");
       var filmerData = readObject(allDancers,readObject(heatData,"Filming"),{});
       var Filmer = readObject(filmerData,"Name");
+      if ( Filmer === undefined || Filmer === "" ) Filmer = readObject(heatData,"Filming");
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
               <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
