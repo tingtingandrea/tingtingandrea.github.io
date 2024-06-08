@@ -702,6 +702,7 @@
           });
         }
         userID = user.uid;
+        //userID = "RMETHBA9CEdhaPvLrYThM4Hv9073";
         console.log(userID);
         //if ( user.isAnonymous ) userID = "test";
         await setupFirebase();
@@ -939,7 +940,7 @@
                 <td>`+readObject(dancerData,"Name")+`</td>
             </tr>
           `;
-          allDancers[d]["BIB Number"] = d;
+          allDancers[d]["BIB Number"] = dancerBibs[d];
         }
       }
 
