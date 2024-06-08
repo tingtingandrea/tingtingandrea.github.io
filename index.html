@@ -633,10 +633,27 @@
                                 //console.log('User signed in:', user);
                                 //userID = user.uid;
                                 //Swal.fire('Signed in successfully!', '', 'success');
-                            })
+                            })/*
                             .catch((error) => {
                                 console.error('Error signing in:', error);
                                 Swal.fire('Error signing in', error.message, 'error');
+                            })*/
+                            .catch((error) => {
+                                if (error.code === 'auth/user-not-found') {
+                                    // If user is not found, sign them up
+                                    auth.createUserWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
+                                        .then((userCredential) => {
+                                            const user = userCredential.user;
+                                            console.log('User signed up and signed in:', user);
+                                        })
+                                        .catch((error) => {
+                                            console.error('Error signing up:', error);
+                                            Swal.fire('Error signing up', error.message, 'error');
+                                        });
+                                } else {
+                                    console.error('Error signing in:', error);
+                                    Swal.fire('Error signing in', error.message, 'error');
+                                }
                             });
                     }
                 });
