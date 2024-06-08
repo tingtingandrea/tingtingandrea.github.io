@@ -1,0 +1,1712 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WCS Film Crew</title>
+  
+  <script src="https://unpkg.com/akar-icons-fonts"></script>
+  <link rel="stylesheet" href="./style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+  
+  <!-- TODO: Add SDKs for Firebase products that you want to use https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+  <!--<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js"></script>-->
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
+    
+  
+  <!-- FirebaseUI Auth -->
+  <!-- https://firebaseopensource.com/projects/firebase/firebaseui-web/ -->
+  <script src="https://www.gstatic.com/firebasejs/ui/4.7.3/firebase-ui-auth.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.17/dist/sweetalert2.all.min.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/solid.min.css" rel="stylesheet">
+
+
+  <script src= "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+  <script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+  
+</head>
+
+<body>
+  <div style="width:100%;text-align: center;" align="center">
+  <div class="phone-container" align="center">
+  <div class="phone">
+    <header class="header" style="width:100%;">
+      <!--<div class="header-logo">
+        <div>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>-->
+      <div class="header-title" style="min-width: max-content;margin-left:0px;">
+        <h2 style="color: var(--c-blue-500);font-weight:bold;margin-right: 20px;">WCS Competition Filming</h2>
+      </div>
+      <div class="header-buttons">
+        <button class="notifications">
+          <i class="ai-bell"></i><!--Total Competiting & Filming-->
+        </button>
+        <button class="avatar" onclick="documentSet('profile-tab','click')">
+          <img id="profileAvatar" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" />
+        </button>
+      </div>
+    </header>
+    <!--<section class="title">
+      <h1>Listening Everyday</h1>
+      <p>Explore millions of music according to your taste</p>
+    </section>-->
+    <section class="search">
+      <div class="search-inner">
+        <button class="search-button">
+          <i class="ai-search" style="color:var(--c-blue-500);"></i>
+        </button>
+        <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase();" onfocus="hideDancers(false)" placeholder="Search Dancer" />
+        <datalist id="dancersList_options">
+        </datalist>
+      </div>
+    </section>
+    <section class="" style="display:flex;margin: 10px 15px;width:100%;align-items: center;justify-content: center;">
+      <article class="card horizontal" style="width:40%;max-width: 200px;">
+        <div class="card-inner" style="padding: 0px;padding-left: 30;" onclick="selectCheckbox(this,'dancerOnly_checkbox');this.closest('article').blur();">
+          <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);"></span>
+          <div class="card-image" style="width:40px;height:40px;">
+            <p style="transform: scale(1.5);text-align: center;">💃🏻🕺</p>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-artist">Dancer</span>
+              <button class="card-meta-button" style="opacity: 0;">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+          </div>
+          <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);left: calc(100% - 5px);top: calc(100% - 5px);"></span>
+        </div>
+        <input id="dancerOnly_checkbox" style="display: none;" value=true>
+      </article>
+      <article class="card horizontal" style="width:40%;max-width: 200px;">
+        <div class="card-inner" style="padding: 0px;padding-left: 30;" onclick="selectCheckbox(this,'filmingOnly_checkbox');this.blur();this.closest('article').blur();">
+          <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);"></span>
+          <div class="card-image" style="width:40px;height:40px;">
+            <p style="transform: scale(1.5);text-align: center;">🎥</p>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-artist">Filming</span>
+              <button class="card-meta-button" style="opacity: 0;">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+          </div>
+          <span class="card-pin simple" style="transform: scale(0.5) rotate(-45deg);left: calc(100% - 5px);top: calc(100% - 5px);"></span>
+        </div>
+        <input id="filmingOnly_checkbox" style="display: none;" value=true>
+      </article>
+
+      <script type="text/javascript">
+        function selectCheckbox(button,id) {
+          var checked = documentSet(id,"get","checked");
+          //console.log(checked);
+          if ( checked ) {
+            documentSet(id,"checked",false);
+            documentSet(button,"classRemove","active");
+          } else {
+            documentSet(id,"checked",true);
+            documentSet(button,"classAdd","active");
+          }
+          this.blur();
+
+          if ( documentSet("dancerSearch","get","value").trim() !== "" ) setupFirebase();
+        }
+      </script>
+
+      <!--<div style="background-color: #ec008c;border-radius: 20px;width: 200px;">
+        <input type="checkbox" class="search-input" style="width: 15px;" placeholder="Search Music" />
+        <label>Dancer</label>
+      </div>
+      <div style="background-color: #ec008c;border-radius: 20px;width: 200px;">
+        <input type="checkbox" class="search-input" style="width: 15px;" placeholder="Search Music" />
+        <label>Filming</label>
+      </div>-->
+    </section>
+
+    <nav class="navigation">
+      <a href="#" class="navigation-item active" id="schedule-tab" onclick="event.preventDefault();clickTab(this);">Schedule</a>
+      <a href="#" class="navigation-item" id="competitions-tab" onclick="event.preventDefault();clickTab(this);">Competitions</a>
+      <a href="#" class="navigation-item" id="dancers-tab" onclick="event.preventDefault();clickTab(this);">Dancers</a>
+      <a href="#" class="navigation-item" id="profile-tab" onclick="event.preventDefault();clickTab(this);">Profile</a>
+      <script type="text/javascript">
+          function clickTab(tab) {
+            //console.log(tab)
+            var tabDiv = tab.closest("nav").children;
+            for ( var t = 0; t < tabDiv.length; t++ ) {
+              var navTab = tabDiv[t];
+              documentSet(navTab,"classRemove","active");
+              documentSet(navTab.id+"Content","display","none");
+            }
+            documentSet(tab,"classAdd","active");
+            documentSet(tab.id+"Content","remove","display");
+          }
+      </script>
+    </nav>
+    <section id="schedule-tabContent"  class="myProfile" align="center" style="margin-top: 20px;">
+      <div class="table-container" align="center">
+          <table style="border:1px black solid;border-radius: 5px;width: 95%;">
+              <thead>
+                  <tr style="background-color: 189EA2;color:white;">
+                      <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3)"><p>Dancer <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3)"><p>Filming <span class="fa fa-caret-down"></span></p></th>
+                      <th style="display:none;"><p>Id</p></th>
+                      <th style="display:none;"><p>Event</p></th>
+                  </tr>
+              </thead>
+              <tbody id="heatTable" align="center">
+                <!--<tr>
+                    <td><input type="text" value="id">Competition + Heat</td>
+                    <td contenteditable="true">Sarah</td>
+                    <td contenteditable="true">Andrea</td>
+                    <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
+                    <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
+                </tr>-->
+              </tbody>
+          </table>
+          <datalist id="competitionHeat_options">
+          </datalist>
+          <script type="text/javascript">
+            // Listen for input focus event
+            // Add event listener to tbody to listen for focus event
+            document.getElementById('heatTable').addEventListener('focusin', function(event) {
+                // Check if the focused element is an input element
+                if (event.target.tagName.toLowerCase() === 'input') {
+                    // Check if the input has the datalist "dancersList_options"
+                    //var dataListId = event.target.getAttribute('list');
+                    //if (dataListId === 'dancersList_options') {
+                    var nameID = event.target.getAttribute('name');
+                    if (nameID === 'Filmer') {
+                        // Perform your action here
+                        //console.log('Input with dancersList_options gained focus');
+                        hideDancers(event.target.closest("tr"));
+                    } else {
+                      hideDancers(false);
+                    }
+                }
+            });
+
+            function hideDancers(tRow) {
+                var checkDancers = [];
+                if ( tRow !== false ) {
+                    var rowDate = getRowData(tRow);
+                    //console.log(rowDate);
+                    var competitionValue = rowDate.Competition;
+                    //console.log(competitionValue);
+
+                    var competitionList = document.getElementById('competitionHeat_options');
+                    var toRemove = false;
+                    var competitionArray = [];
+                    Array.from(competitionList.options).forEach(function(option) {
+                      var optionValue = option.getAttribute('data-value')
+                      optionValue = optionValue !== null ? optionValue.trim() : "";
+                      console.log(optionValue);
+                      if ( toRemove ) {
+                        competitionArray.push(optionValue);
+                        toRemove = false;
+                      }
+                      if ( optionValue === competitionValue ) {
+                        competitionArray.push(optionValue);
+                        toRemove = true;
+                      }
+                    });
+                    console.log(competitionArray);
+
+                    var dancerHeats = jQuery.extend(true, [], heatSchedule).filter(function (row) {
+                      return competitionArray.includes(row.Competition);
+                    });
+                    console.log(dancerHeats);
+                    for ( var d in dancerHeats ) {
+                      checkDancers.push(readObject(dancerHeats[d],"Dancer"));
+                    }
+                }
+                checkDancers = cleanArray(checkDancers);
+                console.log(checkDancers);
+
+
+                // Get the datalist associated with the input
+                var dataList = document.getElementById('dancersList_options');
+                // Get the value of the input
+                //var inputValue = event.target.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+
+
+                // Iterate through each option in the datalist
+                Array.from(dataList.options).forEach(function(option) {
+                    // Get the option's value
+                    //var optionValue = option.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+                    var optionValue = option.getAttribute('data-value')
+                    optionValue = optionValue !== null ? optionValue.trim() : "";
+                    //console.log(optionValue);
+
+                    option.removeAttribute('disabled'); // Show the option
+
+                    // Check the information and hide specific options based on your criteria
+                    if ( tRow === false ) {
+                        option.removeAttribute('disabled'); // Show the option
+                    } else if ( !checkDancers.includes(optionValue) ) {
+                        option.removeAttribute('disabled'); // Show the option
+                    } else {
+                        option.disabled = 'true'; // Hide the option
+                    }
+                });
+            }
+
+            async function saveHeat(data) {
+              for ( var d in data ) {
+                if ( data[d] === "" && d !== "Filming" ) return;
+                if ( data[d] === "" && d !== "Dancer" ) heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
+              }
+              var dataID = data.Id;
+              delete data.Id
+              await scheduleDatabase.doc(dataID).set(data);
+
+              heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
+            };
+          </script>
+      </div>
+      <div align="right">
+        <p style="width: 350px;text-align: right;" onclick="addHeat()"><span class="fa fa-plus"></span>Add new Filming Schedule</p>
+      </div>
+    </section>
+    <section id="competitions-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
+      <div class="table-container" align="center">
+          <table style="border:1px black solid;border-radius: 5px;width: 95%;">
+              <thead>
+                  <tr style="background-color: 189EA2;color:white;">
+                      <th onclick="sortTable(0)"><p>Date <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(1)"><p>Time <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3)"><p>Heats <span class="fa fa-caret-down"></span></p></th>
+                      <th style="display:none;"><p>Id</p></th>
+                      <th style="display:none;"><p>Event</p></th>
+                  </tr>
+              </thead>
+              <tbody id="competitionTable" align="center">
+                  <!--<tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-01"></td>
+                    <td contenteditable="true"><input type="time" value="12:00"></td>
+                    <td contenteditable="true"><input type="text" list="CompetitionsList_options" value="Swimming" onchange="getRowData(this.closest('tr'))"></td>
+                    <td contenteditable="true"><input type="number" value="1" onchange="tableToObject(this.closest('table').id)"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-02"></td>
+                    <td contenteditable="true"><input type="time" value="14:00"></td>
+                    <td contenteditable="true">Running</td>
+                    <td contenteditable="true">Heat 2</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true"><input type="date" value="2024-06-03"></td>
+                    <td contenteditable="true"><input type="time" value="16:00"></td>
+                    <td contenteditable="true">Jumping</td>
+                    <td contenteditable="true">Heat 3</td>
+                </tr>-->
+              </tbody>
+          </table>
+          <datalist id="CompetitionsList_options">
+          </datalist>
+          <script type="text/javascript">
+            async function saveCompetition(data) {
+              var hasHeats = true;
+              for ( var d in data ) {
+                if ( data[d] === "" && d === "Heats" ) hasHeats = false;
+                if ( data[d] === "" && d !== "Heats" ) return;
+              }
+              var dataID = data.Id;
+              delete data.Id
+              competitionDatabase.doc(dataID).set(data);
+
+              if ( data["Competition"] !== "" && !CompetitionsList.includes(data["Competition"]) ) {
+                settingsDatabase.doc("competitionList").set({"competitionNames":firebase.firestore.FieldValue.arrayUnion(...[data["Competition"]])}, {merge:true});
+                //documentSet("eventLists_options","get").innerHTML += await setupOptions([data["Competition"]]);
+              }
+
+              if ( hasHeats ) await setupFirebase();
+            };
+          </script>
+      </div>
+      <div align="right">
+        <p style="width: 200px;text-align: right;" onclick="addCompetition()"><span class="fa fa-plus"></span>Add new Competition</p>
+      </div>
+    </section>
+    <section id="dancers-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
+      <div class="table-container" align="center">
+          <table style="border:1px black solid;border-radius: 5px;width: 95%;text-align: center !important;">
+              <thead>
+                  <tr style="background-color: 189EA2;color:white;">
+                      <th onclick="sortTable(0)"><p>Bib Number<span class="fa fa-caret-down"></span></p></th>
+                      <th style="width: 100px;text-align: center;"><p>Profile</p></th>
+                      <th onclick="sortTable(2)"><p>Name<span class="fa fa-caret-down"></span></p></th>
+                  </tr>
+              </thead>
+              <tbody id="dancersList">
+                  <!--<tr>
+                    <td>102</td>
+                    <td><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
+                    <td>Sarah</td>
+                </tr>
+                <tr>
+                    <td>102</td>
+                    <td><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
+                    <td>Sarah</td>
+                </tr>
+                <tr>
+                    <td>102</td>
+                    <td><img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" style="max-width: 100px;"></td>
+                    <td>Sarah</td>
+                </tr>-->
+              </tbody>
+          </table>
+          <!--Add Admin Panel, assign bibs-->
+      </div>
+    </section>
+    <section id="profile-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
+        <img id="profileImage" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" alt="Select Profile Image" style="display: inline;max-width: 150px;font-weight: bold;font-size: 10px;">
+        <input type="file" id="imageInput" style="display: none;" accept="image/*">
+        <button id="changeImageButton" class="fa fa-camera" style="display: inline;background-color: #ec088c;border-color: #ec088c;color: white;border-radius: 20px;padding: 10px;"></button><br><br>
+        <script type="text/javascript">
+          document.getElementById('changeImageButton').addEventListener('click', function() {
+              document.getElementById('imageInput').click();
+          });
+
+          document.getElementById('imageInput').addEventListener('change', function(event) {
+              const file = event.target.files[0];
+              if (file) {
+                  const reader = new FileReader();
+                  reader.onload = function(e) {
+                      document.getElementById('profileImage').src = e.target.result;
+                  };
+                  reader.readAsDataURL(file);
+                  var fileName = userID+file.name.split(".").pop();
+
+                  const storageRef = storage.ref('dancers/' + fileName);
+                  const uploadTask = storageRef.put(file);
+
+                  uploadTask.on('state_changed', 
+                      function(snapshot) {
+                          // Observe state change events such as progress, pause, and resume
+                          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                          //document.getElementById('message').innerText = 'Upload is ' + progress + '% done';
+                      }, 
+                      function(error) {
+                          // Handle unsuccessful uploads
+                          console.error('Error uploading image:', error);
+                          //document.getElementById('message').innerText = 'Error uploading image: ' + error.message;
+                      }, 
+                      
+                      async function() {
+                          // Handle successful uploads on complete
+                          try {
+                              const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                              //console.log('File available at', downloadURL);
+                              
+                              // Save image ID to Firestore under "dancers/test/Profile"
+                              await dancersDatabase.doc(userID).set({Profile:downloadURL},{merge:true});/*.collection('Profile').add({
+                                  imageId: uploadTask.snapshot.metadata.name, // Saving image ID
+                                  imageUrl: downloadURL,
+                                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                              });*/
+
+                              //console.log('Image ID saved to Firestore!');
+                              //document.getElementById('message').innerText = 'Image uploaded and ID saved to Firestore!';
+                          } catch (error) {
+                              console.error('Error saving image ID to Firestore:', error);
+                              //document.getElementById('message').innerText = 'Error saving image ID to Firestore: ' + error.message;
+                          }
+                      }
+                  );
+              }
+          });
+
+
+        </script>
+        <form id="dancersProfile">
+          <label style="font-weight:bold;margin-right: 5px;">Name</label><input id="dancersName" type="text" name="Name"><br><br>
+          <label style="font-weight:bold;margin-right: 5px;">Competition Level</label><input id="competitionLevel" type="text" name="Competition Level" list="competitionLevels_list"><br><br>
+          <datalist id="competitionLevels_list">
+            <option value="Newcomer">
+            <option value="Novice">
+            <option value="Intermediate">
+            <option value="Advanced">
+            <option value="AllStar">
+            <option value="Champion">
+          </datalist>
+
+          <label style="font-weight:bold;margin-right: 5px;">Current Event</label><input id="currentEvent" type="text" name="Current Event" list="eventLists_options"><br><br>
+          <datalist id="eventLists_options">
+          </datalist>
+
+          <label style="font-weight:bold;margin-right: 5px;">Current Bib Number</label><input id="currentBib" type="number" name="bibNumber"><br><br>
+
+          <button id="changeImageButton" style="display: inline;background-color: #ec088c;border-color: #ec088c;color: white;border-radius: 25px;padding: 10px;width: 150px;" onclick="event.preventDefault();saveProfile(this.form)">SAVE</button>
+        </form>
+        <script type="text/javascript">
+          async function saveProfile(form) {
+            Swal.fire({
+              title: "Saving Profile..."
+            });
+            Swal.showLoading();
+            form = $("#"+form.id).serializeJSON();
+            //console.log(form);
+
+            if ( form["Current Event"] !== "" && form["Current Event"] !== undefined && form.bibNumber !== undefined && form.bibNumber !== "" ) {
+              await settingsDatabase.doc(form["Current Event"]).set({"DancerBibs":{[userID]:form.bibNumber}}, {merge:true});
+            }
+
+
+            delete form.bibNumber;
+            console.log(form);
+            await dancersDatabase.doc(userID).set(form, {merge:true});
+            if ( !eventsList.includes(form["Current Event"]) ) {
+              settingsDatabase.doc("eventsList").set({"events":firebase.firestore.FieldValue.arrayUnion(...[form["Current Event"]])}, {merge:true});
+              documentSet("eventLists_options","get").innerHTML += await setupOptions([form["Current Event"]]);
+            }
+            Swal.fire({
+              title: "Profile Saved."
+            });
+            if ( firstLogin ) setupFirebase();
+          }
+        </script>
+        <!--Ability to claim anoyomous profiles-->
+    </section>
+    <!--<section class="playlists" style="display:nonel">
+
+      <article class="card">
+        <div class="card-inner">
+          <span class="card-pin"></span>
+          <div class="card-image">
+            <img src="https://assets.codepen.io/285131/illustration-hand-with-cigarette-icon.jpg" />
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-number">20 songs</span>
+              <button class="card-meta-button">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+            <h2 class="card-title">Alan Walker</h2>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-inner">
+          <span class="card-pin"></span>
+          <div class="card-image">
+            <img src="https://assets.codepen.io/285131/hand-drawn-monster-milkshake.jpg" />
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-number">20 songs</span>
+              <button class="card-meta-button">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+            <h2 class="card-title">Tim Bergling</h2>
+          </div>
+        </div>
+      </article>
+    </section>-->
+    <!--<section class="currently-playing">
+      <article class="card horizontal">
+        <div class="card-inner">
+          <span class="card-pin simple"></span>
+          <div class="card-image">
+            <img src="https://assets.codepen.io/285131/pink-pastel-juicy-banana.jpg" />
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-meta-artist">Marshmello</span>
+              <button class="card-meta-button" style="opacity: 0;">
+                <i class="ai-circle-triangle-right-fill"></i>
+              </button>
+            </div>
+            <h2 class="card-title">Hate the Other Side
+              <span class="card-time">3:40</span>
+            </h2>
+          </div>
+          <span class="card-pin simple"></span>
+        </div>
+      </article>
+    </section>-->
+    <footer class="menu">
+      <div class="menu-inner">
+      </div>
+      <!--<div class="menu-inner">
+        <a href="#" class="menu-item active">
+          <i class="ai-home"></i>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="ai-heart"></i>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="ai-fire"></i>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="ai-gear"></i>
+        </a>
+      </div-->
+    </footer>
+    <br>
+    <!--<button id="logoutButton" onclick="event.preventDefault();" style="text-decoration: none !important;background: none;border: none;font-size: 10px;">Log Out</button>-->
+  </div>
+  
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyChyTHwZRXmbv6_S5e3Q0BmgE3vy1syT-g",
+      authDomain: "wcs-comps.firebaseapp.com",
+      projectId: "wcs-comps",
+      storageBucket: "wcs-comps.appspot.com",
+      messagingSenderId: "746091459497",
+      appId: "1:746091459497:web:dafcb6404ab75d68840ab8",
+      measurementId: "G-37TMFJBG63"
+    };
+  
+    // Initialize Firebase
+    var myProfile;
+    var userID;
+    var myEvent;
+    var dancersData = {};
+    var myBib = "";
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const storage = firebase.storage();
+    var firstLogin = true;
+
+    window.addEventListener("load", async function () {
+      await auth.onAuthStateChanged( async function(user) {
+        if (user) {
+          // User is signed in.
+          console.log("User is signed in:", user);
+          // You can now update the UI to show the user's info
+        } else {
+          // No user is signed in.
+          console.log("No user is signed in");
+          // Redirect to login page or show a login button
+          Swal.fire({title: "Login",
+            //showDenyButton: true,
+            //showCancelButton: true,
+            //confirmButtonText: 'Email',
+            //denyButtonText: 'Sign in Anonymously',
+            confirmButtonText: 'Sign in Anonymously',
+            //denyButtonColor: "var(--c-gray-500)",
+            //cancelButtonText: 'Google',
+            //cancelButtonColor: "var(--c-blue-500)",
+          }).then( async function(result) {
+            //console.log(result);
+            if (result.isConfirmed) {
+
+                await auth.signInAnonymously()
+                    .then((result) => {
+                        const user = result.user;
+                        //userID = "test";
+                        //console.log('User signed in anonymously:', user);
+                        //Swal.fire('Signed in anonymously successfully!', '', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in anonymously:', error);
+                        Swal.fire('Error signing in anonymously', error.message, 'error');
+                    });
+
+                /*Swal.fire({
+                    title: 'Enter your email and password',
+                    html:
+                        '<input type="email" id="email" class="swal2-input" placeholder="Email">' +
+                        '<input type="password" id="password" class="swal2-input" placeholder="Password">',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const email = Swal.getPopup().querySelector('#email').value;
+                        const password = Swal.getPopup().querySelector('#password').value;
+                        if (!email || !password) {
+                            Swal.showValidationMessage(`Please enter email and password`);
+                        }
+                        return { email: email, password: password };
+                    }
+                }).then((loginDetails) => {
+                    if (loginDetails.value) {
+                        auth.signInWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
+                            .then((userCredential) => {
+                                // Signed in
+                                const user = userCredential.user;
+                                //console.log('User signed in:', user);
+                                //userID = user.uid;
+                                //Swal.fire('Signed in successfully!', '', 'success');
+                            })
+                            .catch((error) => {
+                                console.error('Error signing in:', error);
+                                Swal.fire('Error signing in', error.message, 'error');
+                            })
+                            .catch((error) => {
+                                if (error.code === 'auth/user-not-found') {
+                                    // If user is not found, sign them up
+                                    auth.createUserWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
+                                        .then((userCredential) => {
+                                            const user = userCredential.user;
+                                            console.log('User signed up and signed in:', user);
+                                        })
+                                        .catch((error) => {
+                                            console.error('Error signing up:', error);
+                                            Swal.fire('Error signing up', error.message, 'error');
+                                        });
+                                } else {
+                                    console.error('Error signing in:', error);
+                                    Swal.fire('Error signing in', error.message, 'error');
+                                }
+                            });
+                    }
+                });*/
+            } else if (result.isDenied) {
+                await auth.signInAnonymously()
+                    .then((result) => {
+                        const user = result.user;
+                        //userID = "test";
+                        //console.log('User signed in anonymously:', user);
+                        //Swal.fire('Signed in anonymously successfully!', '', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in anonymously:', error);
+                        Swal.fire('Error signing in anonymously', error.message, 'error');
+                    });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                /*auth.signInWithPopup(provider)
+                    .then((result) => {
+                        const user = result.user;
+                        //userID = user.uid;
+                        //console.log('User signed in with Google:', user);
+                        //Swal.fire('Signed in with Google successfully!', '', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in with Google:', error);
+                        Swal.fire('Error signing in with Google', error.message, 'error');
+                    });*/
+          }
+          //await setupFirebase();
+          //Login and setup profile
+          firstLogin = true;
+          });
+        }
+        userID = user.uid;
+        userID = "RMETHBA9CEdhaPvLrYThM4Hv9073";
+        console.log(userID);
+        //if ( user.isAnonymous ) userID = "test";
+        await setupFirebase();
+      });
+    });
+
+    const logoutButton = document.getElementById('logoutButton');
+
+    // Add event listener to log out button
+    logoutButton.addEventListener('click', function () {
+        auth.signOut().then(() => {
+            console.log('User signed out successfully');
+            // Optionally, redirect to a different page or perform other actions
+            //window.location.href = 'login.html'; // Redirect to login page
+        }).catch((error) => {
+            console.error('Error signing out:', error);
+        });
+    });
+
+    async function setupFirebase() {
+      const db = firebase.firestore();
+      settingsDatabase = db.collection("Settings");
+      eventsList = await getFirebase(settingsDatabase,"eventsList");
+      eventsList = eventsList.events;
+      //console.log(eventsList);
+      documentSet(eventLists_options,"innerHTML",await setupOptions(eventsList));
+      //bib assignments (1 doc per event)
+
+      CompetitionsList = await getFirebase(settingsDatabase,"competitionList");
+      CompetitionsList = CompetitionsList.competitionNames;
+      //console.log(CompetitionsList);
+      documentSet(CompetitionsList_options,"innerHTML",await setupOptions(CompetitionsList));
+      dancersDatabase = db.collection("Dancers");
+      //Profiles
+      competitionDatabase = db.collection("Competitions");
+      //List of Comps, how many heats
+      scheduleDatabase = db.collection("Heats");
+      //Full schedule itemized
+
+      //console.log(userID);
+      var myProfile = await getFirebase(dancersDatabase , userID);//dancersDatabase.doc(userID).get()
+      console.log(myProfile);
+      if ( ( myProfile === [] || readObject(myProfile,"Name") === "" ) && firstLogin ) documentSet("profile-tab","click");
+      documentSet("profileAvatar","src",readObject(myProfile,"Profile"));
+      documentSet("profileImage","src",readObject(myProfile,"Profile"));
+      documentSet("dancersName","value",readObject(myProfile,"Name"));
+      documentSet("competitionLevel","value",readObject(myProfile,"Competition Level"));
+      myEvent = readObject(myProfile,"Current Event");
+      documentSet("currentEvent","value",myEvent);
+
+      if ( myProfile === undefined || myProfile === [] ) {
+        Swal.fire({
+          title: "Please complete your profile."
+        });
+        return;
+      }
+
+      allDancers = {};
+      allDancers_list = {};
+      var allDancers_data = await getFirebase(dancersDatabase,{field:"Current Event",query:"==",input:myEvent});
+      //console.log(allDancers_data);
+      for ( var d in allDancers_data ) {
+        var dancerData = allDancers_data[d];
+        allDancers[dancerData.Id] = dancerData;
+        if ( dancerData.Name !== undefined ) allDancers_list[dancerData.Id] = readObject(dancerData,"Name");
+      }
+      documentSet("dancersList_options","innerHTML",await setupOptions(allDancers_list,"private","",true));
+      //console.log(allDancers);
+
+      if ( myEvent === undefined || myEvent === "" ) {
+        Swal.fire({
+          title: "Please select your<br>Current Event."
+        });
+        return;
+      }
+      await loadDancerList();
+
+
+      var dancerSearchValues = documentSet("dancerSearch","get","value").trim();
+      if ( dancerSearchValues === undefined ) dancerSearchValues = "";
+      dancerSearchValues = cleanArray(dancerSearchValues.split(","));
+      //console.log(dancerSearchValues);
+
+      var dancerSearchKeys = [];
+
+      if ( dancerSearchValues.length > 0 ) {
+        for ( var v in dancerSearchValues ) {
+          var dancerOption = document.querySelector(`datalist#dancersList_options option[value="`+dancerSearchValues[v]+`"]`);
+          dancerOption = dancerOption.getAttribute('data-value');
+          dancerOption = dancerOption !== null ? dancerOption.trim() : "";
+          dancerSearchKeys.push(dancerOption)
+        }
+      }
+
+      //console.log(dancerSearchKeys);
+      var dancerOnly = documentSet("dancerOnly_checkbox","get","checked");
+      var filmerOnly = documentSet("filmingOnly_checkbox","get","checked");
+      var searchBoth = (dancerOnly === filmerOnly);
+
+
+      allCompetitions = {};
+      competitionOptions = {};
+
+      documentSet("competitionTable","innerHTML","");
+      competitionsData = await getFirebase(competitionDatabase,{field:"Event",query:"==",input:myEvent});
+      competitionsData = competitionsData.sort((a, b) => {
+          // Compare Dates
+          if (a.Date < b.Date) return -1;
+          if (a.Date > b.Date) return 1;
+
+          // Dates are equal, compare Times
+          if (a.Time < b.Time) return -1;
+          if (a.Time > b.Time) return 1;
+
+          // Dates and Times are equal, compare Heats
+          if (a.Heat < b.Heat) return -1;
+          if (a.Heat > b.Heat) return 1;
+
+          // Dates, Times, and Heats are equal, compare Competition
+          if (a.Competition < b.Competition) return -1;
+          if (a.Competition > b.Competition) return 1;
+
+          // All fields are equal
+          return 0;
+      });
+      //console.log(competitionsData);
+
+      for ( var c in competitionsData ) {
+        var competitionData = competitionsData[c];
+        allCompetitions[competitionData.Id] = competitionData;
+        addCompetition(competitionData);
+        for (let cH = 1; cH <= competitionData.Heats; cH++) {
+          competitionOptions[competitionData.Id+"H"+cH] = readObject(competitionData,"Competition")+" Heat "+cH;
+        }
+      }
+      //console.log(competitionOptions);
+      documentSet("competitionHeat_options","innerHTML",await setupOptions(competitionOptions,"private","",true));
+
+
+      heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
+      //console.log(heatSchedule);
+      if ( dancerSearchKeys.length > 0 ) {
+        if ( searchBoth ) {
+          heatSchedule = heatSchedule.filter(function (row) {
+            return dancerSearchKeys.includes(readObject(row,"Dancer")) || dancerSearchKeys.includes(readObject(row,"Filming"));
+          });
+        } else if ( dancerOnly ) {
+          heatSchedule = heatSchedule.filter(function (row) {
+            return dancerSearchKeys.includes(readObject(row,"Dancer"));
+          });
+
+        } else if ( filmerOnly ) {
+          heatSchedule = heatSchedule.filter(function (row) {
+            return dancerSearchKeys.includes(readObject(row,"Filming"));
+          });
+
+        }
+      }
+      //console.log(heatSchedule);
+      documentSet("heatTable","innerHTML","");
+
+
+      var notificationBell = 0;
+      for ( var h in heatSchedule ) {
+        var scheduleData = heatSchedule[h];
+        //console.log(scheduleData);
+        var competitionID = scheduleData.Competition.substring(0,8);
+        var competitionData = allCompetitions[competitionID];
+        //console.log(competitionData);
+        heatSchedule[h].Date = competitionData.Date;
+        heatSchedule[h].Time = competitionData.Time;
+        heatSchedule[h].Heats = competitionData.Heats;
+        if ( scheduleData.Dancer === userID || scheduleData.Filming === userID ) notificationBell++;
+      }
+      documentSet(":root","--notification-bell", `"`+notificationBell+`"`);
+
+      //console.log("heatSchedule");
+      heatSchedule = heatSchedule.sort((a, b) => {
+          // Compare Dates
+          if (a.Date < b.Date) return -1;
+          if (a.Date > b.Date) return 1;
+
+          // Dates are equal, compare Times
+          if (a.Time < b.Time) return -1;
+          if (a.Time > b.Time) return 1;
+
+          // Dates and Times are equal, compare Heats
+          if (a.Heat < b.Heat) return -1;
+          if (a.Heat > b.Heat) return 1;
+
+          // Dates, Times, and Heats are equal, compare Competition
+          if (a.Competition < b.Competition) return -1;
+          if (a.Competition > b.Competition) return 1;
+
+          // Compare Dancer Name
+          if (a.Dancer < b.Dancer) return -1;
+          if (a.Dancer > b.Dancer) return 1;
+
+          // Compare Filmer Name
+          if (a.Filming < b.Filming) return -1;
+          if (a.Filming > b.Filming) return 1;
+
+          // All fields are equal
+          return 0;
+      });
+      //console.log(heatSchedule);
+
+      for ( var h in heatSchedule ) {
+        addHeat(heatSchedule[h]);
+      }
+
+      firstLogin = false;
+    }
+
+    async function loadDancerList() {
+      eventData = await getFirebase(settingsDatabase , myEvent);
+      //console.log(eventData);
+
+      var dancerBibs = readObject(eventData,"DancerBibs",{});
+      //console.log(dancerBibs);
+
+      var dancersTable = documentSet("dancersList","get");
+      dancersTable.innerHTML = "";
+
+      for ( var d in dancerBibs ) {
+        var dancerData = await getFirebase(dancersDatabase,d);
+        if ( dancerData !== undefined ){
+          if ( d === userID ) { documentSet("currentBib","value",dancerBibs[d]); myBib = dancerBibs[d] };
+          allDancers[d] = dancerData;
+          console.log(allDancers[d]);
+          dancersTable.innerHTML += `
+            <tr>
+                <td>`+dancerBibs[d]+`</td>
+                <td><img src="`+readObject(dancerData,"Profile")+`" style="max-width: 100px;"></td>
+                <td>`+readObject(dancerData,"Name")+`</td>
+            </tr>
+          `;
+          allDancers[d]["BIB Number"] = dancerBibs[d];
+        }
+      }
+
+      if ( myBib === "" && firstLogin  ) documentSet("profile-tab","click");
+    }
+
+
+    function addHeat(heatData) {
+      //console.log(heatData);
+      var heatName = readObject(competitionOptions,readObject(heatData,"Competition"));
+      var dancerData = readObject(allDancers,readObject(heatData,"Dancer"),{});
+      if ( heatData === undefined ) {
+        heatName = "";
+        dancerData = readObject(allDancers,userID,{});
+      }
+      var Dancer = readObject(dancerData,"Name");
+      if ( Dancer === undefined || Dancer === "" ) Dancer = readObject(heatData,"Dancer");
+      var filmerData = readObject(allDancers,readObject(heatData,"Filming"),{});
+      var Filmer = readObject(filmerData,"Name");
+      if ( Filmer === undefined || Filmer === "" ) Filmer = readObject(heatData,"Filming");
+      documentSet("heatTable","insertAdjacentHTML",`
+          <tr>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on"  value="`+Dancer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" name="Filmer" value="`+Filmer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
+              <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
+              <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
+          </tr>
+      `);
+    };
+
+    function displayInfo(id) {
+      var displayData = allCompetitions[id];
+      if ( displayData === undefined ) displayData = allDancers[id];
+      //console.log(displayData);
+
+      if ( displayData === undefined ) return;
+
+      var dataKeys = ["Date","Time","Heats","Profile","BIB Number"];
+      var html = "";
+      for ( var d in dataKeys ) {
+        var displayText = displayData[dataKeys[d]];
+        if ( displayText !== undefined ) {
+          if ( dataKeys[d] === "Profile" ) {
+            html += `<img src=`+displayText+` style="width:150px;">`;
+          } else {
+            if ( dataKeys[d] === "Date" ) {
+              displayText = new Date(displayText);
+              displayText = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(displayText)+`, `+new Intl.DateTimeFormat('en-US', { month: 'long' }).format(displayText)+` `+displayText.getDate()+getDaySuffix(displayText);
+            }
+
+            html += `<p><span style="font-weight:bold;">`+dataKeys[d]+`</span>: `+displayText+`<p>`;
+          }
+        }
+      }
+      html = `<div align="center">`+html+`</div>`;
+
+      Swal.fire({
+        title: readObject(displayData,"Competition",readObject(displayData,"Name")),
+        html
+      });
+    }
+
+    function getDaySuffix(day) {
+        if (day > 3 && day < 21) return 'th'; // For 11th to 20th
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
+
+    function addCompetition(competitionData) {
+      documentSet("competitionTable","insertAdjacentHTML",`
+            <tr>
+              <td><input type="date" autocomplete="on"  value="`+new Date(readObject(competitionData,"Date",new Date())).toJSON().slice(0,10)+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="time" autocomplete="on"  value="`+readObject(competitionData,"Time")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="text" autocomplete="on"  style="width: -webkit-fill-available;text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="number" autocomplete="on"  style="width: -webkit-fill-available;text-align:center;" value="`+readObject(competitionData,"Heats")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
+              <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
+          </tr>
+      `);
+    };
+
+    async function getFirebase(collection , docID) {
+      if ( typeof docID === "object" ) {
+        var firebaseDoc = await collection.where(docID.field, docID.query, docID.input).get();
+      } else {
+        var firebaseDoc = await collection.doc(docID).get();
+      }
+      //console.log(firebaseDoc);
+
+      if ( firebaseDoc.exists || !firebaseDoc.empty ) {
+        var data = {};
+        if ( !readObject(firebaseDoc,"empty",true) ) {
+          data = [];
+          firebaseDoc = firebaseDoc.docs;
+          await firebaseDoc.forEach(function(doc) {
+            //console.log(doc);
+            //Object.assign(data, doc.data());
+            var docData = doc.data();
+            docData.Id = doc.id;
+            data.push(docData);
+          });
+        } else {
+          data = firebaseDoc.data();
+        }
+        return data
+      } else {
+        return [];
+      }
+    }
+
+    function GenerateID(len) {
+      return Math.random().toString(36).substring(3,len+3);
+    }
+  
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    function cleanArray(array) {
+      return array.filter(Boolean).filter(onlyUnique);
+    }
+
+    function readObject(object,element,returnValue) {
+      try { 
+        if ( returnValue === undefined ) returnValue = ""
+        if ( ( object === null || object === "null" ) && element === "" ) return returnValue;
+        if ( ( element === "" || element === undefined ) && object !== undefined ) return object;
+        var value = object[element];
+        if ( value === undefined || object === undefined ) {
+          return returnValue;
+        } else {
+          return value;
+        };
+      } catch (err) {
+        return returnValue;
+      };
+    }
+
+    async function setupOptions(data , key , textField , sort) {
+      var options = "";
+      if (key === "private" && typeof data === "object") {
+        for (const objKey in data) {
+            options += `<option value="${data[objKey]}" data-value="${objKey}">${data[objKey]}</option>`;
+        }
+        return options;
+      }
+      //console.log(data);
+      var array = Array.isArray(data);
+      var values = data;
+      var dataOptions = data;
+      if ( !array ) {
+        data = dataOptions = jQuery.extend(true, {}, data);
+        if ( key === undefined || key === true ) {
+          values = Object.keys(values);
+          for ( var d in data ) {
+            var dataOption = data[d];
+            dataOptions[d] = readObject(dataOption,textField,dataOption);
+            /*if ( textField !== undefined && textField !== "" ) {
+              dataOptions[d] = dataOption[textField];
+            }*/
+          }
+        } else {
+          dataOptions = {};
+          values = [];
+          for ( var d in data ) {
+            var dataOption = data[d];
+            var value = dataOption[key];
+            values.push(value);
+            dataOptions[value] = dataOption[textField];
+          }
+        }
+      }
+      values = cleanArray(values);
+      
+      if ( sort !== undefined ) {
+        if ( sort ) {
+          //console.log("asc");
+          values = values.sort()
+        } else {
+          //console.log("des");
+          values = values.reverse();
+        };
+      };
+
+      //console.log(values);
+      
+      for ( var v in values ) {
+        var value = values[v];
+        if ( array ) {
+          if ( typeof value === "object" ) {
+            if ( textField === undefined ) {
+              options += "<option value=\""+readObject(value,key)+"\">";
+            } else {
+              options += "<option value=\""+readObject(value,key)+"\">"+readObject(value,textField)+"</option>";
+            }
+          } else {
+            options += "<option value=\""+value+"\">";
+          }
+        } else {
+          options += "<option value=\""+value+"\">"+dataOptions[value]+"</option>";
+        }
+      }
+      //console.log(options);
+      return options;
+    }
+
+    function documentSet(id , setting , value) {
+      try {
+        var style = false;
+        if ( id === ":root" ) {
+          document.querySelector(id).style.setProperty(setting, value);
+          return;
+        }
+        if ( (/(change|onclick|dblclick)/gim).test(setting) ) {
+          doc = $("#"+id);
+          if ( setting === "change" ) return doc.change();
+          if ( setting === "onclick" ) return doc.attr("onclick",value);
+          if ( setting === "ondblclick" ) {
+            doc.attr("ondblclick",value);
+            return;
+          } else if ( setting === "dblclick" ) {
+            return doc.dblclick();
+          }
+        };
+        var doc = document.getElementById(id);
+        if ( doc === null ) {
+          doc = id
+        };
+        if ( !(doc instanceof Element) ) {
+          return;
+        };
+        //console.log(doc)
+        if ( setting === "get" ) {
+          return readObject(doc,value,doc);
+        } else if ( setting.includes("display") || value === "display" || (setting.includes("Style")&&setting!=="Style") ) {
+          doc = doc.style;
+          style = true;
+          setting = setting.replace("Style","");
+        }
+        if ( setting === "click" ) {
+          return doc.click();
+        } else if ( setting === "focus" ) {
+          return doc.focus();
+        } else if ( setting === "reset" ) {
+          return doc.reset();
+        } else if ( setting === "check" ) {
+          return doc.setAttribute("checked",true);
+        } else if ( setting === "uncheck" ) {
+          return doc.removeAttribute("checked");
+        } else if ( setting === "classAdd" ) {
+          return doc.classList.add(value);
+        } else if ( setting === "classRemove" ) {
+          return doc.classList.remove(value);
+        } else if ( setting === "remove" ) {
+          if ( style ) {
+            return doc.removeProperty(value);
+          } else if ( value.includes("HTML") ) {
+            doc[value] = "";
+          } else {
+            return doc.removeAttribute(value);
+          }
+        } else if ( setting === "value" ) {
+          var selected = true;
+          var text = hidden = "";
+          if ( doc.tagName === "SELECT" ) {
+            //console.log(value)
+            if ( typeof value === "object" ) {
+              text = readObject(value,"text",readObject(value,"value",""));
+              hidden = readObject(value,"hidden","");
+              selected = readObject(value,"selected",true);
+              value = readObject(value,"value","");
+            } else {
+              text = value;
+            };
+            //console.log(value);
+            var valueExists = {
+              length: 0,
+            };
+            if ( value === "" || hidden === "hidden" ) {
+            } else {
+              valueExists = $("#"+doc.id+" option[value=\""+value+"\"]");
+              //console.log(valueExists);
+            }
+            if ( valueExists.length === 0 ) {
+              var selectedTrue = "";
+              if ( selected && doc.multiple ) {
+                selectedTrue = "selected";
+                selected = false;
+              }
+              documentSet(doc.id,"insertAdjacentElement","<option value=\""+value+"\" "+selectedTrue+" "+hidden+">"+text+"</option>");
+            }
+          }
+          if ( selected ) {
+            return doc.value = value;
+          } else {
+            return;
+          }
+        } else if ( setting === "insertAdjacentElement" ) {
+          return doc.insertAdjacentHTML("afterbegin", value);
+        } else if ( setting === "insertAdjacentHTML" ) {
+          return doc.insertAdjacentHTML("beforeend", value);
+        } else if ( setting === "appendChild" ) {
+          return doc.appendChild(value);
+        } else if ( (setting === "readonly"||setting === "readOnly") && value === undefined ) {
+          return doc.readOnly = true;
+        } else if ( setting === "editQuill" ) {
+          doc.insertAdjacentHTML("beforeend", value);
+          return;
+        } else if ( setting === "mentionQuill" ) {
+          mentionList = value;
+          documentSet(id+"Container","innerHTML",
+          `<div id="emailTemplate_editor" class="plaintext">
+          `+documentSet(id,"get","innerHTML")+`
+          </div>`
+          );
+          return quillEmail();
+        }
+        return doc[setting] = value;
+      } catch (err) {
+        //console.log(err);
+        return;
+      }
+    }
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById('sortableTable');
+        const rows = Array.from(table.rows).slice(1);
+        const isAscending = table.getAttribute('data-sort-direction') === 'ascending';
+        
+        rows.sort((a, b) => {
+            let aText, bText;
+            
+            if (columnIndex === 0 || columnIndex === 1) {
+                aText = a.cells[columnIndex].querySelector('input').value;
+                bText = b.cells[columnIndex].querySelector('input').value;
+            } else {
+                aText = a.cells[columnIndex].innerText;
+                bText = b.cells[columnIndex].innerText;
+            }
+            
+            if (columnIndex === 0) { // Date column
+                return isAscending ? new Date(aText) - new Date(bText) : new Date(bText) - new Date(aText);
+            } else if (columnIndex === 1) { // Time column
+                const aTime = new Date(`1970-01-01T${aText}Z`);
+                const bTime = new Date(`1970-01-01T${bText}Z`);
+                return isAscending ? aTime - bTime : bTime - aTime;
+            } else { // Other columns
+                return isAscending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            }
+        });
+        
+        rows.forEach(row => table.tBodies[0].appendChild(row));
+        table.setAttribute('data-sort-direction', isAscending ? 'descending' : 'ascending');
+    }
+
+    function tableToObject(tableId) {
+      const table = document.getElementById(tableId);
+      const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.innerText);
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      const data = rows.map(row => {
+          const cells = Array.from(row.querySelectorAll('td'));
+          const obj = {};
+          cells.forEach((cell, index) => {
+              obj[headers[index]] = cell.innerText;
+          });
+          return obj;
+      });
+      //console.log(data);
+      return data;
+    }
+
+    function getRowData(row) {
+        //console.log(row);
+        const headers = Array.from(row.closest('table').querySelectorAll('thead th'));
+        const cells = Array.from(row.querySelectorAll('td'));
+        
+        const rowData = {};
+        cells.forEach((cell, index) => {
+            const header = headers[index].innerText.trim();
+            //console.log(cell);
+            const input = cell.querySelector('input');
+            if (input) {
+              const selectedOption = document.querySelector(`datalist#${input.getAttribute('list')} option[value="${input.value}"]`);
+              if (selectedOption) {
+                  const dataValue = selectedOption.getAttribute('data-value');
+                  rowData[header] = dataValue !== null ? dataValue.trim() : input.value.trim();
+              } else {
+                  rowData[header] = input.value.trim();
+              }
+            } else {
+                rowData[header] = cell.innerText.trim();
+            }
+        });
+
+        //console.log(rowData);
+        return rowData;
+    }
+
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    document.addEventListener('touchstart', function(event) {
+        touchStartY = event.touches[0].clientY;
+    }, false);
+
+    document.addEventListener('touchend', function(event) {
+        touchEndY = event.changedTouches[0].clientY;
+        handleGesture();
+    }, false);
+
+    function handleGesture() {
+        if (touchStartY < touchEndY) {
+            const swipeDistance = touchEndY - touchStartY;
+            if (swipeDistance > 100) { // Adjust the threshold as needed
+                //console.log('Swipe down detected. Reloading...');
+                setupFirebase();
+            }
+        }
+    }
+
+  </script>
+  <script>
+  /*!
+    SerializeJSON jQuery plugin.
+    https://github.com/marioizquierdo/jquery.serializeJSON
+    version 3.2.1 (Feb, 2021)
+
+    Copyright (c) 2012-2021 Mario Izquierdo
+    Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+    and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+  */
+  (function (factory) {
+      /* global define, require, module */
+      if (typeof define === "function" && define.amd) { // AMD. Register as an anonymous module.
+          define(["jquery"], factory);
+      } else if (typeof exports === "object") { // Node/CommonJS
+          var jQuery = require("jquery");
+          module.exports = factory(jQuery);
+      } else { // Browser globals (zepto supported)
+          factory(window.jQuery || window.Zepto || window.$); // Zepto supported on browsers as well
+      }
+
+  }(function ($) {
+      "use strict";
+
+      var rCRLF = /\r?\n/g;
+      var rsubmitterTypes = /^(?:submit|button|image|reset|file)$/i;
+      var rsubmittable = /^(?:input|select|textarea|keygen)/i;
+      var rcheckableType = /^(?:checkbox|radio)$/i;
+
+      $.fn.serializeJSON = function (options) {
+          var f = $.serializeJSON;
+          var $form = this; // NOTE: the set of matched elements is most likely a form, but it could also be a group of inputs
+          var opts = f.setupOpts(options); // validate options and apply defaults
+          var typeFunctions = $.extend({}, opts.defaultTypes, opts.customTypes);
+
+          // Make a list with {name, value, el} for each input element
+          var serializedArray = f.serializeArray($form, opts);
+
+          // Convert the serializedArray into a serializedObject with nested keys
+          var serializedObject = {};
+          $.each(serializedArray, function (_i, obj) {
+
+              var nameSansType = obj.name;
+              var type = $(obj.el).attr("data-value-type");
+
+              if (!type && !opts.disableColonTypes) { // try getting the type from the input name
+                  var p = f.splitType(obj.name); // "foo:string" => ["foo", "string"]
+                  nameSansType = p[0];
+                  type = p[1];
+              }
+              if (type === "skip") {
+                  return; // ignore fields with type skip
+              }
+              if (!type) {
+                  type = opts.defaultType; // "string" by default
+              }
+
+              var typedValue = f.applyTypeFunc(obj.name, obj.value, type, obj.el, typeFunctions); // Parse type as string, number, etc.
+
+              if (!typedValue && f.shouldSkipFalsy(obj.name, nameSansType, type, obj.el, opts)) {
+                  return; // ignore falsy inputs if specified in the options
+              }
+
+              var keys = f.splitInputNameIntoKeysArray(nameSansType);
+              f.deepSet(serializedObject, keys, typedValue, opts);
+          });
+          return serializedObject;
+      };
+
+      // Use $.serializeJSON as namespace for the auxiliar functions
+      // and to define defaults
+      $.serializeJSON = {
+          defaultOptions: {}, // reassign to override option defaults for all serializeJSON calls
+
+          defaultBaseOptions: { // do not modify, use defaultOptions instead
+              checkboxUncheckedValue: undefined, // to include that value for unchecked checkboxes (instead of ignoring them)
+              useIntKeysAsArrayIndex: false, // name="foo[2]" value="v" => {foo: [null, null, "v"]}, instead of {foo: ["2": "v"]}
+
+              skipFalsyValuesForTypes: [], // skip serialization of falsy values for listed value types
+              skipFalsyValuesForFields: [], // skip serialization of falsy values for listed field names
+
+              disableColonTypes: false, // do not interpret ":type" suffix as a type
+              customTypes: {}, // extends defaultTypes
+              defaultTypes: {
+                  "string":  function(str) { return String(str); },
+                  "number":  function(str) { return Number(str); },
+                  "boolean": function(str) { var falses = ["false", "null", "undefined", "", "0"]; return falses.indexOf(str) === -1; },
+                  "null":    function(str) { var falses = ["false", "null", "undefined", "", "0"]; return falses.indexOf(str) === -1 ? str : null; },
+                  "array":   function(str) { return JSON.parse(str); },
+                  "object":  function(str) { return JSON.parse(str); },
+                  "skip":    null // skip is a special type used to ignore fields
+              },
+              defaultType: "string",
+          },
+
+          // Validate and set defaults
+          setupOpts: function(options) {
+              if (options == null) options = {};
+              var f = $.serializeJSON;
+
+              // Validate
+              var validOpts = [
+                  "checkboxUncheckedValue",
+                  "useIntKeysAsArrayIndex",
+
+                  "skipFalsyValuesForTypes",
+                  "skipFalsyValuesForFields",
+
+                  "disableColonTypes",
+                  "customTypes",
+                  "defaultTypes",
+                  "defaultType"
+              ];
+              for (var opt in options) {
+                  if (validOpts.indexOf(opt) === -1) {
+                      throw new  Error("serializeJSON ERROR: invalid option '" + opt + "'. Please use one of " + validOpts.join(", "));
+                  }
+              }
+
+              // Helper to get options or defaults
+              return $.extend({}, f.defaultBaseOptions, f.defaultOptions, options);
+          },
+
+          // Just like jQuery's serializeArray method, returns an array of objects with name and value.
+          // but also includes the dom element (el) and is handles unchecked checkboxes if the option or data attribute are provided.
+          serializeArray: function($form, opts) {
+              if (opts == null) { opts = {}; }
+              var f = $.serializeJSON;
+
+              return $form.map(function() {
+                  var elements = $.prop(this, "elements"); // handle propHook "elements" to filter or add form elements
+                  return elements ? $.makeArray(elements) : this;
+
+              }).filter(function() {
+                  var $el = $(this);
+                  var type = this.type;
+
+                  // Filter with the standard W3C rules for successful controls: http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2
+                  return this.name && // must contain a name attribute
+                      !$el.is(":disabled") && // must not be disable (use .is(":disabled") so that fieldset[disabled] works)
+                      rsubmittable.test(this.nodeName) && !rsubmitterTypes.test(type) && // only serialize submittable fields (and not buttons)
+                      (this.checked || !rcheckableType.test(type) || f.getCheckboxUncheckedValue($el, opts) != null); // skip unchecked checkboxes (unless using opts)
+
+              }).map(function(_i, el) {
+                  var $el = $(this);
+                  var val = $el.val();
+                  var type = this.type; // "input", "select", "textarea", "checkbox", etc.
+
+                  if (val == null) {
+                      return null;
+                  }
+
+                  if (rcheckableType.test(type) && !this.checked) {
+                      val = f.getCheckboxUncheckedValue($el, opts);
+                  }
+
+                  if (isArray(val)) {
+                      return $.map(val, function(val) {
+                          return { name: el.name, value: val.replace(rCRLF, "\r\n"), el: el };
+                      } );
+                  }
+
+                  return { name: el.name, value: val.replace(rCRLF, "\r\n"), el: el };
+
+              }).get();
+          },
+
+          getCheckboxUncheckedValue: function($el, opts) {
+              var val = $el.attr("data-unchecked-value");
+              if (val == null) {
+                  val = opts.checkboxUncheckedValue;
+              }
+              return val;
+          },
+
+          // Parse value with type function
+          applyTypeFunc: function(name, strVal, type, el, typeFunctions) {
+              var typeFunc = typeFunctions[type];
+              if (!typeFunc) { // quick feedback to user if there is a typo or missconfiguration
+                  throw new Error("serializeJSON ERROR: Invalid type " + type + " found in input name '" + name + "', please use one of " + objectKeys(typeFunctions).join(", "));
+              }
+              return typeFunc(strVal, el);
+          },
+
+          // Splits a field name into the name and the type. Examples:
+          //   "foo"           =>  ["foo", ""]
+          //   "foo:boolean"   =>  ["foo", "boolean"]
+          //   "foo[bar]:null" =>  ["foo[bar]", "null"]
+          splitType : function(name) {
+              var parts = name.split(":");
+              if (parts.length > 1) {
+                  var t = parts.pop();
+                  return [parts.join(":"), t];
+              } else {
+                  return [name, ""];
+              }
+          },
+
+          // Check if this input should be skipped when it has a falsy value,
+          // depending on the options to skip values by name or type, and the data-skip-falsy attribute.
+          shouldSkipFalsy: function(name, nameSansType, type, el, opts) {
+              var skipFromDataAttr = $(el).attr("data-skip-falsy");
+              if (skipFromDataAttr != null) {
+                  return skipFromDataAttr !== "false"; // any value is true, except the string "false"
+              }
+
+              var optForFields = opts.skipFalsyValuesForFields;
+              if (optForFields && (optForFields.indexOf(nameSansType) !== -1 || optForFields.indexOf(name) !== -1)) {
+                  return true;
+              }
+
+              var optForTypes = opts.skipFalsyValuesForTypes;
+              if (optForTypes && optForTypes.indexOf(type) !== -1) {
+                  return true;
+              }
+
+              return false;
+          },
+
+          // Split the input name in programatically readable keys.
+          // Examples:
+          // "foo"              => ["foo"]
+          // "[foo]"            => ["foo"]
+          // "foo[inn][bar]"    => ["foo", "inn", "bar"]
+          // "foo[inn[bar]]"    => ["foo", "inn", "bar"]
+          // "foo[inn][arr][0]" => ["foo", "inn", "arr", "0"]
+          // "arr[][val]"       => ["arr", "", "val"]
+          splitInputNameIntoKeysArray: function(nameWithNoType) {
+              var keys = nameWithNoType.split("["); // split string into array
+              keys = $.map(keys, function (key) { return key.replace(/\]/g, ""); }); // remove closing brackets
+              if (keys[0] === "") { keys.shift(); } // ensure no opening bracket ("[foo][inn]" should be same as "foo[inn]")
+              return keys;
+          },
+
+          // Set a value in an object or array, using multiple keys to set in a nested object or array.
+          // This is the main function of the script, that allows serializeJSON to use nested keys.
+          // Examples:
+          //
+          // deepSet(obj, ["foo"], v)               // obj["foo"] = v
+          // deepSet(obj, ["foo", "inn"], v)        // obj["foo"]["inn"] = v // Create the inner obj["foo"] object, if needed
+          // deepSet(obj, ["foo", "inn", "123"], v) // obj["foo"]["arr"]["123"] = v //
+          //
+          // deepSet(obj, ["0"], v)                                   // obj["0"] = v
+          // deepSet(arr, ["0"], v, {useIntKeysAsArrayIndex: true})   // arr[0] = v
+          // deepSet(arr, [""], v)                                    // arr.push(v)
+          // deepSet(obj, ["arr", ""], v)                             // obj["arr"].push(v)
+          //
+          // arr = [];
+          // deepSet(arr, ["", v]          // arr => [v]
+          // deepSet(arr, ["", "foo"], v)  // arr => [v, {foo: v}]
+          // deepSet(arr, ["", "bar"], v)  // arr => [v, {foo: v, bar: v}]
+          // deepSet(arr, ["", "bar"], v)  // arr => [v, {foo: v, bar: v}, {bar: v}]
+          //
+          deepSet: function (o, keys, value, opts) {
+              if (opts == null) { opts = {}; }
+              var f = $.serializeJSON;
+              if (isUndefined(o)) { throw new Error("ArgumentError: param 'o' expected to be an object or array, found undefined"); }
+              if (!keys || keys.length === 0) { throw new Error("ArgumentError: param 'keys' expected to be an array with least one element"); }
+
+              var key = keys[0];
+
+              // Only one key, then it's not a deepSet, just assign the value in the object or add it to the array.
+              if (keys.length === 1) {
+                  if (key === "") { // push values into an array (o must be an array)
+                      o.push(value);
+                  } else {
+                      o[key] = value; // keys can be object keys (strings) or array indexes (numbers)
+                  }
+                  return;
+              }
+
+              var nextKey = keys[1]; // nested key
+              var tailKeys = keys.slice(1); // list of all other nested keys (nextKey is first)
+
+              if (key === "") { // push nested objects into an array (o must be an array)
+                  var lastIdx = o.length - 1;
+                  var lastVal = o[lastIdx];
+
+                  // if the last value is an object or array, and the new key is not set yet
+                  if (isObject(lastVal) && isUndefined(f.deepGet(lastVal, tailKeys))) {
+                      key = lastIdx; // then set the new value as a new attribute of the same object
+                  } else {
+                      key = lastIdx + 1; // otherwise, add a new element in the array
+                  }
+              }
+
+              if (nextKey === "") { // "" is used to push values into the nested array "array[]"
+                  if (isUndefined(o[key]) || !isArray(o[key])) {
+                      o[key] = []; // define (or override) as array to push values
+                  }
+              } else {
+                  if (opts.useIntKeysAsArrayIndex && isValidArrayIndex(nextKey)) { // if 1, 2, 3 ... then use an array, where nextKey is the index
+                      if (isUndefined(o[key]) || !isArray(o[key])) {
+                          o[key] = []; // define (or override) as array, to insert values using int keys as array indexes
+                      }
+                  } else { // nextKey is going to be the nested object's attribute
+                      if (isUndefined(o[key]) || !isObject(o[key])) {
+                          o[key] = {}; // define (or override) as object, to set nested properties
+                      }
+                  }
+              }
+
+              // Recursively set the inner object
+              f.deepSet(o[key], tailKeys, value, opts);
+          },
+
+          deepGet: function (o, keys) {
+              var f = $.serializeJSON;
+              if (isUndefined(o) || isUndefined(keys) || keys.length === 0 || (!isObject(o) && !isArray(o))) {
+                  return o;
+              }
+              var key = keys[0];
+              if (key === "") { // "" means next array index (used by deepSet)
+                  return undefined;
+              }
+              if (keys.length === 1) {
+                  return o[key];
+              }
+              var tailKeys = keys.slice(1);
+              return f.deepGet(o[key], tailKeys);
+          }
+      };
+
+      // polyfill Object.keys to get option keys in IE<9
+      var objectKeys = function(obj) {
+          if (Object.keys) {
+              return Object.keys(obj);
+          } else {
+              var key, keys = [];
+              for (key in obj) { keys.push(key); }
+              return keys;
+          }
+      };
+
+      var isObject =          function(obj) { return obj === Object(obj); }; // true for Objects and Arrays
+      var isUndefined =       function(obj) { return obj === void 0; }; // safe check for undefined values
+      var isValidArrayIndex = function(val) { return /^[0-9]+$/.test(String(val)); }; // 1,2,3,4 ... are valid array indexes
+      var isArray =           Array.isArray || function(obj) { return Object.prototype.toString.call(obj) === "[object Array]"; };
+  }));
+  </script>
+  </div>
+  </div>
+</body>
