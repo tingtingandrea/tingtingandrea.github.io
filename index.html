@@ -564,6 +564,7 @@
         </a>
       </div-->
     </footer>
+    <button id="logoutButton" onclick="event.preventDefault();" style="text-decoration: :none;">Log Out</button>
   </div>
   
   <script>
@@ -600,9 +601,19 @@
           console.log("No user is signed in");
           // Redirect to login page or show a login button
           Swal.fire({title: "Login",
+            //showDenyButton: true,
+            //showCancelButton: true,
+            //confirmButtonText: 'Email',
+            //denyButtonText: 'Sign in Anonymously',
             confirmButtonText: 'Sign in Anonymously',
+            //denyButtonColor: "var(--c-gray-500)",
+            //cancelButtonText: 'Google',
+            //cancelButtonColor: "var(--c-blue-500)",
           }).then( async function(result) {
-            //console.log(result);await auth.signInAnonymously()
+            //console.log(result);
+            if (result.isConfirmed) {
+
+                await auth.signInAnonymously()
                     .then((result) => {
                         const user = result.user;
                         //userID = "test";
@@ -613,6 +624,79 @@
                         console.error('Error signing in anonymously:', error);
                         Swal.fire('Error signing in anonymously', error.message, 'error');
                     });
+
+                /*Swal.fire({
+                    title: 'Enter your email and password',
+                    html:
+                        '<input type="email" id="email" class="swal2-input" placeholder="Email">' +
+                        '<input type="password" id="password" class="swal2-input" placeholder="Password">',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const email = Swal.getPopup().querySelector('#email').value;
+                        const password = Swal.getPopup().querySelector('#password').value;
+                        if (!email || !password) {
+                            Swal.showValidationMessage(`Please enter email and password`);
+                        }
+                        return { email: email, password: password };
+                    }
+                }).then((loginDetails) => {
+                    if (loginDetails.value) {
+                        auth.signInWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
+                            .then((userCredential) => {
+                                // Signed in
+                                const user = userCredential.user;
+                                //console.log('User signed in:', user);
+                                //userID = user.uid;
+                                //Swal.fire('Signed in successfully!', '', 'success');
+                            })
+                            .catch((error) => {
+                                console.error('Error signing in:', error);
+                                Swal.fire('Error signing in', error.message, 'error');
+                            })
+                            .catch((error) => {
+                                if (error.code === 'auth/user-not-found') {
+                                    // If user is not found, sign them up
+                                    auth.createUserWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
+                                        .then((userCredential) => {
+                                            const user = userCredential.user;
+                                            console.log('User signed up and signed in:', user);
+                                        })
+                                        .catch((error) => {
+                                            console.error('Error signing up:', error);
+                                            Swal.fire('Error signing up', error.message, 'error');
+                                        });
+                                } else {
+                                    console.error('Error signing in:', error);
+                                    Swal.fire('Error signing in', error.message, 'error');
+                                }
+                            });
+                    }
+                });*/
+            } else if (result.isDenied) {
+                await auth.signInAnonymously()
+                    .then((result) => {
+                        const user = result.user;
+                        //userID = "test";
+                        //console.log('User signed in anonymously:', user);
+                        //Swal.fire('Signed in anonymously successfully!', '', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in anonymously:', error);
+                        Swal.fire('Error signing in anonymously', error.message, 'error');
+                    });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                /*auth.signInWithPopup(provider)
+                    .then((result) => {
+                        const user = result.user;
+                        //userID = user.uid;
+                        //console.log('User signed in with Google:', user);
+                        //Swal.fire('Signed in with Google successfully!', '', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error signing in with Google:', error);
+                        Swal.fire('Error signing in with Google', error.message, 'error');
+                    });*/
+          }
           //await setupFirebase();
           //Login and setup profile
           firstLogin = true;
@@ -623,6 +707,19 @@
         //if ( user.isAnonymous ) userID = "test";
         await setupFirebase();
       });
+    });
+
+    const logoutButton = document.getElementById('logoutButton');
+
+    // Add event listener to log out button
+    logoutButton.addEventListener('click', function () {
+        auth.signOut().then(() => {
+            console.log('User signed out successfully');
+            // Optionally, redirect to a different page or perform other actions
+            window.location.href = 'login.html'; // Redirect to login page
+        }).catch((error) => {
+            console.error('Error signing out:', error);
+        });
     });
 
     async function setupFirebase() {
