@@ -963,7 +963,7 @@
       if ( Filmer === undefined || Filmer === "" ) Filmer = readObject(heatData,"Filming");
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition").substring(0,8)+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition")+`')"></i></div></td>
               <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on"  value="`+Dancer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
               <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" name="Filmer" value="`+Filmer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
               <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
@@ -973,6 +973,14 @@
     };
 
     function displayInfo(id) {
+      var isCompetition = false;
+      var competitionHeat = "";
+      if ( allCompetitions[id.substring(0,8)] !== undefined ) {
+        isCompetition = true;
+        competitionHeat = "Heat "+id[id.length - 1].toString();
+        id = id.substring(0,8);
+      }
+      
       var displayData = allCompetitions[id];
       if ( displayData === undefined ) displayData = allDancers[id];
       //console.log(displayData);
@@ -998,8 +1006,12 @@
       }
       html = `<div align="center">`+html+`</div>`;
 
+      var title = readObject(displayData,"Competition",readObject(displayData,"Name"));
+      if ( competitionHeat !== "" ) title += "<br>"+competitionHeat;
+
+
       Swal.fire({
-        title: readObject(displayData,"Competition",readObject(displayData,"Name")),
+        title,
         html
       });
     }
