@@ -600,11 +600,11 @@
           console.log("No user is signed in");
           // Redirect to login page or show a login button
           Swal.fire({title: "Login",
-            showDenyButton: true,
+            //showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: 'Email',
-            denyButtonText: 'Sign in Anonymously',
-            denyButtonColor: "var(--c-gray-500)",
+            //denyButtonText: 'Sign in Anonymously',
+            //denyButtonColor: "var(--c-gray-500)",
             cancelButtonText: 'Google',
             cancelButtonColor: "var(--c-blue-500)",
           }).then( async function(result) {
@@ -641,7 +641,7 @@
                     }
                 });
             } else if (result.isDenied) {
-                await auth.signInAnonymously()
+                /*await auth.signInAnonymously()
                     .then((result) => {
                         const user = result.user;
                         //userID = "test";
@@ -651,7 +651,7 @@
                     .catch((error) => {
                         console.error('Error signing in anonymously:', error);
                         Swal.fire('Error signing in anonymously', error.message, 'error');
-                    });
+                    });*/
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 auth.signInWithPopup(provider)
                     .then((result) => {
