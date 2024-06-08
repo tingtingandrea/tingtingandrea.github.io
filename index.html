@@ -466,8 +466,6 @@
 
             if ( form["Current Event"] !== "" && form["Current Event"] !== undefined && form.bibNumber !== undefined && form.bibNumber !== "" ) {
               await settingsDatabase.doc(form["Current Event"]).set({"DancerBibs":{[userID]:form.bibNumber}}, {merge:true});
-
-              await loadDancerList();
             }
 
 
