@@ -1,1 +1,166 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Studio Mademoiselle App</title>
+  
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+	<script src="https://unpkg.com/akar-icons-fonts"></script>
+	<link rel="stylesheet" href="./styleMademoiselle.css">
+
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+  
+  <!-- TODO: Add SDKs for Firebase products that you want to use https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+  <!--<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js"></script>-->
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
+    
+  
+  <!-- FirebaseUI Auth -->
+  <!-- https://firebaseopensource.com/projects/firebase/firebaseui-web/ -->
+  <script src="https://www.gstatic.com/firebasejs/ui/4.7.3/firebase-ui-auth.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.17/dist/sweetalert2.all.min.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/solid.min.css" rel="stylesheet">
+
+
+  <script src= "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+  <script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+
+  <script src="scriptMademoiselle.js"></script>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="phone">
+	<header class="header">
+		<div class="header-logo">
+			<div>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+		<div class="header-title">
+			Home
+		</div>
+		<div class="header-buttons">
+			<button class="notifications">
+				<i class="ai-bell"></i>
+			</button>
+			<button class="avatar">
+<img src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" />
+			</button>
+		</div>
+	</header>
+	<section class="title">
+		<h1>Listening Everyday</h1>
+		<p>Explore millions of music according to your taste</p>
+	</section>
+	<section class="search">
+		<div class="search-inner">
+			<button class="search-button">
+				<i class="ai-search"></i>
+			</button>
+			<input type="text" class="search-input" placeholder="Search Music" />
+
+		</div>
+	</section>
+
+	<nav class="navigation">
+		<a href="#" class="navigation-item active">Overview</a>
+		<a href="#" class="navigation-item">Songs</a>
+		<a href="#" class="navigation-item">Albums</a>
+		<a href="#" class="navigation-item">Artists</a>
+	</nav>
+	<section class="playlists">
+
+		<article class="card">
+			<div class="card-inner">
+				<span class="card-pin"></span>
+				<div class="card-image">
+					<img src="https://assets.codepen.io/285131/illustration-hand-with-cigarette-icon.jpg" />
+				</div>
+				<div class="card-content">
+					<div class="card-meta">
+						<span class="card-meta-number">20 songs</span>
+						<button class="card-meta-button">
+							<i class="ai-circle-triangle-right-fill"></i>
+						</button>
+					</div>
+					<h2 class="card-title">Alan Walker</h2>
+				</div>
+			</div>
+		</article>
+
+		<article class="card">
+			<div class="card-inner">
+				<span class="card-pin"></span>
+				<div class="card-image">
+					<img src="https://assets.codepen.io/285131/hand-drawn-monster-milkshake.jpg" />
+				</div>
+				<div class="card-content">
+					<div class="card-meta">
+						<span class="card-meta-number">20 songs</span>
+						<button class="card-meta-button">
+							<i class="ai-circle-triangle-right-fill"></i>
+						</button>
+					</div>
+					<h2 class="card-title">Tim Bergling</h2>
+				</div>
+			</div>
+		</article>
+	</section>
+	<section class="currently-playing">
+
+		<article class="card horizontal">
+			<div class="card-inner">
+				<span class="card-pin simple"></span>
+				<div class="card-image">
+					<img src="https://assets.codepen.io/285131/pink-pastel-juicy-banana.jpg" />
+				</div>
+				<div class="card-content">
+					<div class="card-meta">
+						<span class="card-meta-artist">Marshmello</span>
+						<button class="card-meta-button" style="opacity: 0;">
+							<i class="ai-circle-triangle-right-fill"></i>
+						</button>
+					</div>
+					<h2 class="card-title">Hate the Other Side
+						<span class="card-time">3:40</span>
+					</h2>
+				</div>
+				<span class="card-pin simple"></span>
+			</div>
+		</article>
+	</section>
+	<footer class="menu">
+		<div class="menu-inner">
+			<a href="#" class="menu-item active">
+				<i class="ai-home"></i>
+			</a>
+			<a href="#" class="menu-item">
+				<i class="ai-heart"></i>
+			</a>
+			<a href="#" class="menu-item">
+				<i class="ai-fire"></i>
+			</a>
+			<a href="#" class="menu-item">
+				<i class="ai-gear"></i>
+			</a>
+		</div>
+	</footer>
+</div>
+<!-- partial -->
+  <script src='https://unpkg.com/akar-icons-fonts'></script><script  src="./script.js"></script>
+
+</body>
+</html>
