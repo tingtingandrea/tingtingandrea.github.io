@@ -1,7 +1,7 @@
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
-      apiKey: ${{ secrets.FIREBASE_API_KEY }},
+      apiKey: process.env.FIREBASE_API_KEY,
       authDomain: "studio-mademoiselle-f0510.firebaseapp.com",
       projectId: "studio-mademoiselle-f0510",
       storageBucket: "studio-mademoiselle-f0510.firebasestorage.app",
