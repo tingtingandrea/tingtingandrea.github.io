@@ -32,10 +32,10 @@
           console.log("No user is signed in");
           // Redirect to login page or show a login button
           Swal.fire({title: "Welcome to Studio Mademoiselle",
-            //showDenyButton: true,
+            showDenyButton: true,
             //showCancelButton: true,
             //confirmButtonText: 'Email',
-            //denyButtonText: 'Sign in Anonymously',
+            denyButtonText: 'Testing',
             confirmButtonText: 'Sign in',
             //denyButtonColor: "var(--c-gray-500)",
             //cancelButtonText: 'Google',
@@ -107,7 +107,7 @@
                     .then((result) => {
                         const user = result.user;
                         //userID = "test";
-                        //console.log('User signed in anonymously:', user);
+                        console.log('User signed in anonymously:', user);
                         //Swal.fire('Signed in anonymously successfully!', '', 'success');
                     })
                     .catch((error) => {
