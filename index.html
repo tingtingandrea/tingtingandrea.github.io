@@ -55,7 +55,7 @@
           <i class="ai-bell"></i><!--Total Competiting & Filming-->
         </button>
         <button class="avatar" onclick="documentSet('profile-tab','click')">
-          <img id="profileAvatar" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" />
+          <img id="profileAvatar" src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />
         </button>
       </div>
     </header>
@@ -375,7 +375,7 @@
       </div>
     </section>
     <section id="profile-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
-        <img id="profileImage" src="https://assets.codepen.io/285131/pexels-photo-838875.jpeg" alt="Select Profile Image" style="display: inline;max-width: 150px;font-weight: bold;font-size: 10px;">
+        <img id="profileImage" src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" alt="Select Profile Image" style="display: inline;max-width: 150px;font-weight: bold;font-size: 10px;">
         <input type="file" id="imageInput" style="display: none;" accept="image/*">
         <button id="changeImageButton" class="fa fa-camera" style="display: inline;background-color: #ec088c;border-color: #ec088c;color: white;border-radius: 20px;padding: 10px;"></button><br><br>
         <script type="text/javascript">
@@ -447,9 +447,9 @@
             <option value="Champion">
           </datalist>
 
-          <label style="font-weight:bold;margin-right: 5px;">Current Event</label><input id="currentEvent" type="text" name="Current Event" list="eventLists_options"><br><br>
+          <!--<label style="font-weight:bold;margin-right: 5px;">Current Event</label><input id="currentEvent" type="text" name="Current Event" list="eventLists_options"><br><br>
           <datalist id="eventLists_options">
-          </datalist>
+          </datalist>-->
 
           <label style="font-weight:bold;margin-right: 5px;">Current Bib Number</label><input id="currentBib" type="number" name="bibNumber"><br><br>
 
@@ -463,6 +463,7 @@
             Swal.showLoading();
             form = $("#"+form.id).serializeJSON();
             //console.log(form);
+            form["Current Event"] = "Asia West Coast Swing Open 2025";
 
             if ( form["Current Event"] !== "" && form["Current Event"] !== undefined && form.bibNumber !== undefined && form.bibNumber !== "" ) {
               await settingsDatabase.doc(form["Current Event"]).set({"DancerBibs":{[userID]:form.bibNumber}}, {merge:true});
@@ -561,6 +562,8 @@
           <i class="ai-gear"></i>
         </a>
       </div-->
+      <br>
+      <a style="">logout</a>
     </footer>
     <br>
     <!--<button id="logoutButton" onclick="event.preventDefault();" style="text-decoration: none !important;background: none;border: none;font-size: 10px;">Log Out</button>-->
@@ -599,7 +602,7 @@
           // No user is signed in.
           console.log("No user is signed in");
           // Redirect to login page or show a login button
-          Swal.fire({title: "Login",
+          /*Swal.fire({title: "Login",
             //showDenyButton: true,
             //showCancelButton: true,
             //confirmButtonText: 'Email',
@@ -622,14 +625,15 @@
                     .catch((error) => {
                         console.error('Error signing in anonymously:', error);
                         Swal.fire('Error signing in anonymously', error.message, 'error');
-                    });
+                    });*/
 
-                /*Swal.fire({
-                    title: 'Enter your email and password',
+                Swal.fire({
+                    title: 'Login to start',
                     html:
                         '<input type="email" id="email" class="swal2-input" placeholder="Email">' +
                         '<input type="password" id="password" class="swal2-input" placeholder="Password">',
                     focusConfirm: false,
+                    confirmButtonText: 'Sign in',
                     preConfirm: () => {
                         const email = Swal.getPopup().querySelector('#email').value;
                         const password = Swal.getPopup().querySelector('#password').value;
@@ -670,8 +674,8 @@
                                 }
                             });
                     }
-                });*/
-            } else if (result.isDenied) {
+                });
+            /*} else if (result.isDenied) {
                 await auth.signInAnonymously()
                     .then((result) => {
                         const user = result.user;
@@ -695,11 +699,11 @@
                         console.error('Error signing in with Google:', error);
                         Swal.fire('Error signing in with Google', error.message, 'error');
                     });*/
-          }
+          //}
           //await setupFirebase();
           //Login and setup profile
           firstLogin = true;
-          });
+          //});
         }
         userID = user.uid;
         //userID = "RMETHBA9CEdhaPvLrYThM4Hv9073";
@@ -728,7 +732,7 @@
       eventsList = await getFirebase(settingsDatabase,"eventsList");
       eventsList = eventsList.events;
       //console.log(eventsList);
-      documentSet(eventLists_options,"innerHTML",await setupOptions(eventsList));
+      //documentSet(eventLists_options,"innerHTML",await setupOptions(eventsList));//ADD WHEN EVENTS LIST NEEDED
       //bib assignments (1 doc per event)
 
       CompetitionsList = await getFirebase(settingsDatabase,"competitionList");
