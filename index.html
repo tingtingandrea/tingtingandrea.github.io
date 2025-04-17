@@ -581,8 +581,9 @@
   
   <script>
     // Your web app's Firebase configuration
+    const firebaseKey = process.env.WCS_TOKEN;
     const firebaseConfig = {
-      apiKey: "AIzaSyChyTHwZRXmbv6_S5e3Q0BmgE3vy1syT-g",
+      apiKey: firebaseKey,
       authDomain: "wcs-comps.firebaseapp.com",
       projectId: "wcs-comps",
       storageBucket: "wcs-comps.appspot.com",
