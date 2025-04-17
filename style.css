@@ -311,7 +311,6 @@
   	background-color: #fff;
   	position: relative;
   	margin-top: 2rem;
-    flex-wrap: wrap;
   	&:after {
   		content: "";
   		display: block;
