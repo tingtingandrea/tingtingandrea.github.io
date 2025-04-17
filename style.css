@@ -50,11 +50,11 @@
       }
 
       h1 {
-          font-size: 1.7em; /* Adjust font size for smaller screens */
+          font-size: 1.2em; /* Adjust font size for smaller screens */
       }
 
       h2 {
-          font-size: 1.2em; /* Adjust font size for smaller screens */
+          font-size: 0.9em; /* Adjust font size for smaller screens */
       }
 
       p {
@@ -99,19 +99,19 @@
       }
 
       h1 {
-          font-size: 1.2em; /* Adjust font size for smaller screens */
+          font-size: 1em; /* Adjust font size for smaller screens */
       }
 
       h2 {
-          font-size: 0.9em; /* Adjust font size for smaller screens */
+          font-size: 0.8em; /* Adjust font size for smaller screens */
       }
 
       p {
-          font-size: 0.7em; /* Adjust font size for smaller screens */
+          font-size: 0.5em; /* Adjust font size for smaller screens */
       }
 
       input {
-          font-size: 0.7em; /* Adjust font size for smaller screens */
+          font-size: 0.5em; /* Adjust font size for smaller screens */
       }
 
       .navigation-item {
@@ -161,6 +161,7 @@
   }
   
   .header {
+    width: 99%;
   	display: grid;
   	align-items: center;
   	justify-content: space-between;
