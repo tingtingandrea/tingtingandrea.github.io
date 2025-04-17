@@ -50,7 +50,7 @@
       }
 
       h1 {
-          font-size: 1.8em; /* Adjust font size for smaller screens */
+          font-size: 1.7em; /* Adjust font size for smaller screens */
       }
 
       h2 {
@@ -58,11 +58,11 @@
       }
 
       p {
-          font-size: 0.9em; /* Adjust font size for smaller screens */
+          font-size: 0.7em; /* Adjust font size for smaller screens */
       }
 
       input {
-          font-size: 0.9em; /* Adjust font size for smaller screens */  
+          font-size: 0.7em; /* Adjust font size for smaller screens */  
       }
 
       .navigation-item {
@@ -85,7 +85,7 @@
   }
 
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
       body {
           font-size: 12px; /* Reduce font size for smaller screens */
       }
