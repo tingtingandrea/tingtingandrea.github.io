@@ -980,10 +980,12 @@
       var Filmer = readObject(filmerData,"Name");
       if ( Filmer === undefined || Filmer === "" ) Filmer = readObject(heatData,"Filming");
       var heatID = readObject(heatData,"Id",GenerateID(8));
+      var newHeat = (readObject(heatData,"Competition") === "");
+      //console.log(newHeat);
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
               <td><div style="display: flex;width: 100%;align-items: center;">
-                <div style="width:100%;" onclick="documentSet('display`+heatID+`' , 'display' , 'none');documentSet('input`+heatID+`' , 'display' , 'block');"><input id="input`+heatID+`" type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;display:none;font-size:10px;">
+                <div id="div`+heatID+`" style="width:100%;" onclick="documentSet('display`+heatID+`' , 'display' , 'none');documentSet('input`+heatID+`' , 'display' , 'block');"><input id="input`+heatID+`" type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;display:none;font-size:10px;">
                   <div id="display`+heatID+`" style="font-size:10px;">`+heatName+`</div>
                 </div>
                 <i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition")+`')"></i></div></td>
@@ -993,6 +995,7 @@
               <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
           </tr>
       `);
+      if ( newHeat ) documentSet("div"+heatID,"click");
     };
 
     function displayInfo(id) {
