@@ -1002,9 +1002,14 @@
       var heatID = readObject(heatData,"Id",GenerateID(8));
       var newHeat = (readObject(heatData,"Competition") === "");
       //console.log(newHeat);
+
+      var compName = readObject(allCompetitions[readObject(heatData,"Competition").slice(0, 8)],"Competition");
+      var backgroundColour = "";
+      if ( compName.includes("Semis") ) backgroundColour = "background-color: red;";
+      if ( compName.includes("Finals") ) backgroundColour = "background-color: gold;";
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
-              <td><div style="display: flex;width: 100%;align-items: center;">
+              <td><div style="display: flex;width: 100%;align-items: center;`+backgroundColour+`">
                 <div id="div`+heatID+`" style="width:100%;" onclick="documentSet('display`+heatID+`' , 'display' , 'none');documentSet('input`+heatID+`' , 'display' , 'block');"><input id="input`+heatID+`" type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;display:none;font-size:10px;">
                   <div id="display`+heatID+`" style="font-size:10px;">`+heatName+`</div>
                 </div>
@@ -1073,11 +1078,14 @@
     }
 
     function addCompetition(competitionData) {
+      var backgroundColour = "";
+      if ( readObject(competitionData,"Competition").includes("Semis") ) backgroundColour = "background-color: red;";
+      if ( readObject(competitionData,"Competition").includes("Finals") ) backgroundColour = "background-color: gold;";
       documentSet("competitionTable","insertAdjacentHTML",`
             <tr>
               <td><input type="date" autocomplete="on"  value="`+new Date(readObject(competitionData,"Date",new Date())).toJSON().slice(0,10)+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
               <td><input type="time" autocomplete="on"  value="`+readObject(competitionData,"Time")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
-              <td><input type="text" autocomplete="on"  style="font-size:11px;min-width:300px;width: -webkit-fill-available;text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="text" autocomplete="on"  style="font-size:11px;min-width:300px;width: -webkit-fill-available;text-align:center;`+backgroundColour+`" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
               <td><input type="number" autocomplete="on"  style="width: -webkit-fill-available;text-align:center;" value="`+readObject(competitionData,"Heats")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
               <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
