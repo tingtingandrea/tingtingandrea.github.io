@@ -162,7 +162,7 @@
       <a href="#" class="navigation-item active" id="schedule-tab" onclick="event.preventDefault();clickTab(this);">Schedule</a>
       <a href="#" class="navigation-item" id="competitions-tab" onclick="event.preventDefault();clickTab(this);">Competitions</a>
       <a href="#" class="navigation-item" id="dancers-tab" onclick="event.preventDefault();clickTab(this);">Dancers</a>
-      <a href="#" class="navigation-item" id="profile-tab" onclick="event.preventDefault();clickTab(this);">Profile</a>
+      <a href="#" class="navigation-item" id="profile-tab" onclick="event.preventDefault();clickTab(this);if(userID===undefined){documentSet('logoutButton','click');login()}";>Profile</a>
       <script type="text/javascript">
           function clickTab(tab) {
             //console.log(tab)
@@ -494,6 +494,7 @@
             form = $("#"+form.id).serializeJSON();
             //console.log(form);
             form["Current Event"] = "Asia West Coast Swing Open 2025";
+            console.log(form);
 
             if ( form["Current Event"] !== "" && form["Current Event"] !== undefined && form.bibNumber !== undefined && form.bibNumber !== "" ) {
               await settingsDatabase.doc(form["Current Event"]).set({"DancerBibs":{[userID]:form.bibNumber}}, {merge:true});
@@ -623,6 +624,10 @@
     var firstLogin = true;
 
     window.addEventListener("load", async function () {
+      login();
+    });
+
+    async function login() {
       await auth.onAuthStateChanged( async function(user) {
         if (user) {
           // User is signed in.
@@ -661,9 +666,12 @@
                     title: 'Login to start',
                     html:
                         '<input type="email" id="email" class="swal2-input" placeholder="Email">' +
-                        '<input type="password" id="password" class="swal2-input" placeholder="Password">',
+                        '<input type="password" id="password" class="swal2-input" placeholder="Password (min 6 characters)">',
                     focusConfirm: false,
-                    confirmButtonText: 'Sign in',
+                    confirmButtonText: 'Login',
+                    //showDenyButton: true,
+                    //denyButtonText: 'Sign up',
+                    //reverseButtons: true,
                     preConfirm: () => {
                         const email = Swal.getPopup().querySelector('#email').value;
                         const password = Swal.getPopup().querySelector('#password').value;
@@ -673,7 +681,11 @@
                         return { email: email, password: password };
                     }
                 }).then((loginDetails) => {
+                    console.log(loginDetails);
+                    console.log(loginDetails.isConfirmed);
                     if (loginDetails.value) {
+                      if ( loginDetails.isConfirmed ) {
+                        console.log("check");
                         auth.signInWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
                             .then((userCredential) => {
                                 // Signed in
@@ -682,12 +694,14 @@
                                 //userID = user.uid;
                                 //Swal.fire('Signed in successfully!', '', 'success');
                             })
-                            .catch((error) => {
+                            /*.catch((error) => {
                                 console.error('Error signing in:', error);
                                 Swal.fire('Error signing in', error.message, 'error');
-                            })
+                            })*/
                             .catch((error) => {
-                                if (error.code === 'auth/user-not-found') {
+                              console.log(error);
+                                //if (error.code === 'auth/user-not-found') {
+                                  console.log("creating new user");
                                     // If user is not found, sign them up
                                     auth.createUserWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
                                         .then((userCredential) => {
@@ -698,11 +712,23 @@
                                             console.error('Error signing up:', error);
                                             Swal.fire('Error signing up', error.message, 'error');
                                         });
-                                } else {
+                                /*} else {
                                     console.error('Error signing in:', error);
                                     Swal.fire('Error signing in', error.message, 'error');
-                                }
+                                }*/
                             });
+                      } else {
+                        console.log("test");
+                        auth.createUserWithEmailAndPassword(loginDetails.value.email, loginDetails.value.password)
+                        .then((userCredential) => {
+                          const user = userCredential.user;
+                          console.log("User signed up:", user);
+                          // You can now redirect, save additional data, etc.
+                        })
+                        .catch((error) => {
+                          console.error("Error signing up:", error.code, error.message);
+                        });
+                      };
                     }
                 });
             /*} else if (result.isDenied) {
@@ -734,14 +760,14 @@
           //Login and setup profile
           firstLogin = true;
           //});
-        }
+        };
         userID = user.uid;
         //userID = "RMETHBA9CEdhaPvLrYThM4Hv9073";
         console.log(userID);
         //if ( user.isAnonymous ) userID = "test";
         await setupFirebase();
       });
-    });
+    };
 
     const logoutButton = document.getElementById('logoutButton');
 
