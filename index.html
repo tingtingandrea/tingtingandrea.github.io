@@ -68,9 +68,11 @@
         <button class="search-button">
           <i class="ai-search" style="color:var(--c-blue-500);"></i>
         </button>
-        <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase();" onfocus="hideDancers(false)" placeholder="Search Dancer" />
-        <datalist id="dancersList_options">
-        </datalist>
+        <form id="searchDancers" style="display: contents;">
+          <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase();" onfocus="hideDancers(false)" placeholder="Search Dancer" />
+          <datalist id="dancersList_options">
+          </datalist>
+        </form>
       </div>
     </section>
     <section class="" style="display:flex;margin: 10px 15px;width:100%;align-items: center;justify-content: center;">
