@@ -18,7 +18,5 @@ jobs:
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.0.0
       with:
-        WCS_TOKEN: ${{ secrets.FIREBASE_WCS_KEY }}
-          folder: WCS
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_API_KEY }}
           folder: StudioMademoiselle
