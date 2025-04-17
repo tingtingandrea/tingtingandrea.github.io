@@ -132,6 +132,16 @@
           margin-left: -15px;
       }
 
+      .autocomplete-item {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+
+      .autocomplete-item img {
+        width: 32px;
+        height: 32px;
+      }
+
       /* Adjust other elements as needed */
   }
   
@@ -301,6 +311,7 @@
   	background-color: #fff;
   	position: relative;
   	margin-top: 2rem;
+    flex-wrap: wrap;
   	&:after {
   		content: "";
   		display: block;
