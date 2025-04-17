@@ -20,3 +20,4 @@ jobs:
       with:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_API_KEY }}
           folder: StudioMademoiselle
+        WCS_TOKEN: ${{ secrets.FIREBASE_WCS_KEY }}
