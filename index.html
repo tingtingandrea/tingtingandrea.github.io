@@ -1,7 +1,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WCS Film Crew</title>
+  <title>AO25 WCS Film Crew</title>
   
   <script src="https://unpkg.com/akar-icons-fonts"></script>
   <link rel="stylesheet" href="./style.css">
@@ -48,7 +48,7 @@
         </div>
       </div>-->
       <div class="header-title" style="min-width: max-content;margin-left:0px;">
-        <h2 style="color: var(--c-blue-500);font-weight:bold;margin-right: 20px;">WCS Competition Filming</h2>
+        <h2 style="color: var(--c-blue-500);font-weight:bold;margin-right: 20px;">AO25 WCS Competition Filming</h2>
       </div>
       <div class="header-buttons">
         <button class="notifications">
@@ -273,14 +273,20 @@
               }
               var dataID = data.Id;
               delete data.Id
-              await scheduleDatabase.doc(dataID).set(data);
+              console.log(data);
+
+              if ( data.Competition.trim().toLowerCase().includes("delete") ) {
+                await scheduleDatabase.doc(dataID).delete();
+              } else {
+                await scheduleDatabase.doc(dataID).set(data);
+              }
 
               heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
             };
           </script>
       </div>
       <div align="right">
-        <p style="width: 350px;text-align: right;" onclick="addHeat()"><span class="fa fa-plus"></span>Add new Filming Schedule</p>
+        <p style="width: 175px;text-align: right;" onclick="addHeat()"><span class="fa fa-plus"></span>Add new Filming Schedule</p>
       </div>
     </section>
     <section id="competitions-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
@@ -328,11 +334,15 @@
               }
               var dataID = data.Id;
               delete data.Id
-              competitionDatabase.doc(dataID).set(data);
+              if ( data.Competition.trim().toLowerCase().includes("delete") ) {
+                await competitionDatabase.doc(dataID).delete();
+              } else {
+                competitionDatabase.doc(dataID).set(data);
 
-              if ( data["Competition"] !== "" && !CompetitionsList.includes(data["Competition"]) ) {
-                settingsDatabase.doc("competitionList").set({"competitionNames":firebase.firestore.FieldValue.arrayUnion(...[data["Competition"]])}, {merge:true});
-                //documentSet("eventLists_options","get").innerHTML += await setupOptions([data["Competition"]]);
+                if ( data["Competition"] !== "" && !CompetitionsList.includes(data["Competition"]) ) {
+                  settingsDatabase.doc("competitionList").set({"competitionNames":firebase.firestore.FieldValue.arrayUnion(...[data["Competition"]])}, {merge:true});
+                  //documentSet("eventLists_options","get").innerHTML += await setupOptions([data["Competition"]]);
+                } 
               }
 
               if ( hasHeats ) await setupFirebase();
@@ -340,7 +350,7 @@
           </script>
       </div>
       <div align="right">
-        <p style="width: 200px;text-align: right;" onclick="addCompetition()"><span class="fa fa-plus"></span>Add new Competition</p>
+        <p style="width: 175px;text-align: right;" onclick="addCompetition()"><span class="fa fa-plus"></span>Add new Competition</p>
       </div>
     </section>
     <section id="dancers-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
@@ -727,6 +737,8 @@
     });
 
     async function setupFirebase() {
+      Swal.fire({title:`Loading Heats...`,html:`<img src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />`});
+      Swal.showLoading();
       const db = firebase.firestore();
       settingsDatabase = db.collection("Settings");
       eventsList = await getFirebase(settingsDatabase,"eventsList");
@@ -919,6 +931,8 @@
       }
 
       firstLogin = false;
+
+      Swal.close();
     }
 
     async function loadDancerList() {
@@ -965,12 +979,17 @@
       var filmerData = readObject(allDancers,readObject(heatData,"Filming"),{});
       var Filmer = readObject(filmerData,"Name");
       if ( Filmer === undefined || Filmer === "" ) Filmer = readObject(heatData,"Filming");
+      var heatID = readObject(heatData,"Id",GenerateID(8));
       documentSet("heatTable","insertAdjacentHTML",`
           <tr>
-              <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition")+`')"></i></div></td>
+              <td><div style="display: flex;width: 100%;align-items: center;">
+                <div style="width:100%;" onclick="documentSet('display`+heatID+`' , 'display' , 'none');documentSet('input`+heatID+`' , 'display' , 'block');"><input id="input`+heatID+`" type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;display:none;font-size:10px;">
+                  <div id="display`+heatID+`" style="font-size:10px;">`+heatName+`</div>
+                </div>
+                <i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Competition")+`')"></i></div></td>
               <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on"  value="`+Dancer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Dancer")+`')"></i></div></td>
               <td><div style="display: flex;width: 100%;align-items: center;"><input type="text" autocomplete="on" name="Filmer" value="`+Filmer+`" list="dancersList_options" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" style="flex:1;width: 100%;text-align: center;"><i class="ai-info" onclick="displayInfo('`+readObject(heatData,"Filming")+`')"></i></div></td>
-              <td style="display:none;">`+readObject(heatData,"Id",GenerateID(8))+`</td>
+              <td style="display:none;">`+heatID+`</td>
               <td style="display:none;">`+readObject(heatData,"Event",myEvent)+`</td>
           </tr>
       `);
@@ -1035,7 +1054,7 @@
             <tr>
               <td><input type="date" autocomplete="on"  value="`+new Date(readObject(competitionData,"Date",new Date())).toJSON().slice(0,10)+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
               <td><input type="time" autocomplete="on"  value="`+readObject(competitionData,"Time")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
-              <td><input type="text" autocomplete="on"  style="width: -webkit-fill-available;text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
+              <td><input type="text" autocomplete="on"  style="font-size:11px;min-width:300px;width: -webkit-fill-available;text-align:center;" list="CompetitionsList_options" value="`+readObject(competitionData,"Competition")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
               <td><input type="number" autocomplete="on"  style="width: -webkit-fill-available;text-align:center;" value="`+readObject(competitionData,"Heats")+`" onchange="event.preventDefault();saveCompetition(getRowData(this.closest('tr')))"></td>
               <td style="display:none;">`+readObject(competitionData,"Id",GenerateID(8))+`</td>
               <td style="display:none;">`+readObject(competitionData,"Event",myEvent)+`</td>
