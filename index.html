@@ -65,14 +65,13 @@
     </section>-->
     <section class="search">
       <div class="search-inner">
-        <button class="search-button">
+        <button class="search-button" onclick="setupFirebase();">
           <i class="ai-search" style="color:var(--c-blue-500);"></i>
         </button>
-        <form id="searchDancers" style="display: contents;">
-          <input id="dancerSearch" type="email" class="search-input" list="dancersList_options" multiple onchange="setupFirebase();" onfocus="hideDancers(false)" placeholder="Search Dancer" />
+          <input id="dancerSearch" type="text" class="autocomplete-input" multiple onfocus="hideDancers(false)" placeholder="Search Dancer" /><!--class="search-input" list="dancersList_options"-->
+          <div id="autocompleteResults" class="autocomplete-results"></div>
           <datalist id="dancersList_options">
           </datalist>
-        </form>
       </div>
     </section>
     <section class="" style="display:flex;margin: 10px 15px;width:100%;align-items: center;justify-content: center;">
@@ -146,7 +145,7 @@
           }
           this.blur();
 
-          if ( documentSet("dancerSearch","get","value").trim() !== "" ) setupFirebase();
+          //if ( documentSet("dancerSearch","get","value").trim() !== "" ) setupFirebase();
         }
       </script>
 
@@ -785,7 +784,7 @@
     });
 
     async function setupFirebase() {
-      Swal.fire({title:`Loading Heats...`,html:`<img src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />`});
+      Swal.fire({title:`Loading...`,html:`<img src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />`});
       Swal.showLoading();
       const db = firebase.firestore();
       settingsDatabase = db.collection("Settings");
@@ -982,6 +981,65 @@
 
       Swal.close();
     }
+
+
+      const input = document.getElementById("dancerSearch");
+      const results = document.getElementById("autocompleteResults");
+
+      input.addEventListener("input", () => {
+        showSuggestions(input.value.toLowerCase());
+      });
+
+      input.addEventListener("focus", () => {
+        showSuggestions(""); // show all on focus
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".autocomplete-container")) {
+          results.style.display = "block";
+        }
+      });
+
+      document.getElementById("searchDancers").addEventListener("submit", (e) => {
+        e.preventDefault(); // Stops reload or submit
+      });
+
+      function showSuggestions(query) {
+        results.innerHTML = "";
+        console.log("allDancers_data");
+        console.log(allDancers);
+
+
+        // Convert object to array with Id included
+        const dancersProfiles = Object.entries(allDancers).map(([id, data]) => ({
+          Id: id,
+          ...data
+        }));
+
+        const filtered = dancersProfiles.filter(dancer =>
+          dancer.Name.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+          results.style.display = "none";
+          return;
+        }
+
+        filtered.forEach(dancer => {
+          const div = document.createElement("div");
+          div.className = "autocomplete-item";
+          div.innerHTML = `<img src="${dancer.Profile}" alt="${dancer.Name}">${dancer.Name}`;
+          div.onclick = () => {
+            input.value = dancer.Name;
+            results.innerHTML = "";
+            results.style.display = "none";
+            console.log("Selected dancer:", dancer); // You can use this for additional actions
+          };
+          results.appendChild(div);
+        });
+
+        results.style.display = "block";
+      }
 
     async function loadDancerList() {
       eventData = await getFirebase(settingsDatabase , myEvent);
