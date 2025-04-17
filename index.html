@@ -68,8 +68,8 @@
         <button class="search-button" onclick="setupFirebase();">
           <i class="ai-search" style="color:var(--c-blue-500);"></i>
         </button>
-          <input id="dancerSearch" type="text" class="autocomplete-input" multiple onfocus="hideDancers(false)" placeholder="Search Dancer" /><!--class="search-input" list="dancersList_options"-->
-          <div id="autocompleteResults" class="autocomplete-results"></div>
+          <input id="dancerSearch" type="text" class="autocomplete-input" multiple onfocus="hideDancers(false)" placeholder="Search Dancer"><!--class="search-input" list="dancersList_options"-->
+          <div id="autocompleteResults" class="autocomplete-results" style="display:none;"></div>
           <datalist id="dancersList_options">
           </datalist>
       </div>
@@ -982,7 +982,7 @@
       Swal.close();
     }
 
-
+      const container = document.querySelector(".search-inner");
       const input = document.getElementById("dancerSearch");
       const results = document.getElementById("autocompleteResults");
 
@@ -994,9 +994,15 @@
         showSuggestions(""); // show all on focus
       });
 
+      // Show dropdown on input focus/click
+      input.addEventListener("focus", () => {
+        results.style.display = "block";
+      });
+
+      // Hide dropdown when clicking outside the container
       document.addEventListener("click", (e) => {
-        if (!e.target.closest(".autocomplete-container")) {
-          results.style.display = "block";
+        if (!container.contains(e.target)) {
+          results.style.display = "none";
         }
       });
 
