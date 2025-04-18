@@ -744,6 +744,8 @@
       width: 100%;
       overflow-x: auto;
       white-space: nowrap;
+      max-height: 70vh; /* 100% of visible screen height */
+      overflow-y: auto;
   }
 
   table {
@@ -754,6 +756,14 @@
   td {
     min-width: 100px;
     width: max-content;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background-color: 189EA2!important;
+    color: white!important;
+    z-index: 1;
   }
 
 //SWAL ALERTS//////////////////////////////////////////////////////////////////////////////////////
