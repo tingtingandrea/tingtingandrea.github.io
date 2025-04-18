@@ -180,12 +180,12 @@
     </nav>
     <section id="schedule-tabContent"  class="myProfile" align="center" style="margin-top: 20px;">
       <div class="table-container" align="center">
-          <table style="border:1px black solid;border-radius: 5px;">
+          <table id="filmingTable" style="border:1px black solid;border-radius: 5px;">
               <thead>
                   <tr style="background-color: 189EA2;color:white;">
-                      <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(3)"><p>Dancer <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(3)"><p>Filming <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(0,'filmingTable')"><p>Competition <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(1,'filmingTable')"><p>Dancer <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(2,'filmingTable')"><p>Filming <span class="fa fa-caret-down"></span></p></th>
                       <th style="display:none;"><p>Id</p></th>
                       <th style="display:none;"><p>Event</p></th>
                   </tr>
@@ -312,13 +312,13 @@
     </section>
     <section id="competitions-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
       <div class="table-container" align="center">
-          <table style="border:1px black solid;border-radius: 5px;">
+          <table id="competitionTable" style="border:1px black solid;border-radius: 5px;">
               <thead>
                   <tr style="background-color: 189EA2;color:white;">
-                      <th onclick="sortTable(0)"><p>Date <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(1)"><p>Time <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(2)"><p>Competition <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(3)"><p>Heats <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(0,'competitionTable')"><p>Date <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(1,'competitionTable')"><p>Time <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(2,'competitionTable')"><p>Competition <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3,'competitionTable')"><p>Heats <span class="fa fa-caret-down"></span></p></th>
                       <th style="display:none;"><p>Id</p></th>
                       <th style="display:none;"><p>Event</p></th>
                   </tr>
@@ -376,12 +376,12 @@
     </section>
     <section id="dancers-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
       <div class="table-container" align="center">
-          <table style="border:1px black solid;border-radius: 5px;text-align: center !important;">
+          <table id="dancerTable" style="border:1px black solid;border-radius: 5px;text-align: center !important;">
               <thead>
                   <tr style="background-color: 189EA2;color:white;">
-                      <th onclick="sortTable(0)"><p>Bib Number<span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(0,'dancerTable')"><p>Bib Number<span class="fa fa-caret-down"></span></p></th>
                       <th style="width: 100px;text-align: center;"><p>Profile</p></th>
-                      <th onclick="sortTable(2)"><p>Name<span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(2,'dancerTable')"><p>Name<span class="fa fa-caret-down"></span></p></th>
                   </tr>
               </thead>
               <tbody id="dancersList">
@@ -1429,8 +1429,8 @@
       }
     }
 
-    function sortTable(columnIndex) {
-        const table = document.getElementById('sortableTable');
+    function sortTable(columnIndex, id) {
+        const table = document.getElementById(id);
         const rows = Array.from(table.rows).slice(1);
         const isAscending = table.getAttribute('data-sort-direction') === 'ascending';
         
