@@ -784,7 +784,7 @@
     });
 
     async function setupFirebase() {
-      Swal.fire({title:`Loading...`,html:`<img src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />`});
+      Swal.fire({html:`<img src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />`});
       Swal.showLoading();
       const db = firebase.firestore();
       settingsDatabase = db.collection("Settings");
@@ -1034,7 +1034,8 @@
         filtered.forEach(dancer => {
           const div = document.createElement("div");
           div.className = "autocomplete-item";
-          div.innerHTML = `<img src="${dancer.Profile}" alt="${dancer.Name}">${dancer.Name}`;
+          //div.innerHTML = `<img src="${dancer.Profile}" alt="${dancer.Name}">${dancer.Name}`;
+          div.innerHTML = `<img src="${dancer.Profile}" alt="${dancer.Name}" onerror="this.style.display='none'">${dancer.Name} [${dancer["BIB Number"]}]`;
           div.onclick = () => {
             input.value = dancer.Name;
             results.innerHTML = "";
