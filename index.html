@@ -1100,8 +1100,22 @@
       var backgroundColour = "";
       if ( compName.includes("Semis") ) backgroundColour = "background-color: red;";
       if ( compName.includes("Finals") ) backgroundColour = "background-color: gold;";
+      var iconColour = "";
+      const match = readObject(heatData,"Competition").slice(9).trim();
+      console.log(match);
+
+      if (match) {
+        const heatNumber = parseInt(match);
+        console.log(heatNumber);
+
+        if (heatNumber % 2 === 0) {
+          iconColour = "background-color: lightblue;";
+        } else {
+          //icon.style.color = ""; // Optional: reset to default
+        }
+      }
       documentSet("heatTable","insertAdjacentHTML",`
-          <tr>
+          <tr style="`+iconColour+`">
               <td><div style="display: flex;width: 100%;align-items: center;`+backgroundColour+`">
                 <div id="div`+heatID+`" style="width:100%;" onclick="documentSet('display`+heatID+`' , 'display' , 'none');documentSet('input`+heatID+`' , 'display' , 'block');"><input id="input`+heatID+`" type="text" autocomplete="on" value="`+heatName+`" onchange="event.preventDefault();saveHeat(getRowData(this.closest('tr')))" list="competitionHeat_options" style="flex:1;width: 100%;text-align: center;display:none;font-size:10px;">
                   <div id="display`+heatID+`" style="font-size:10px;">`+heatName+`</div>
