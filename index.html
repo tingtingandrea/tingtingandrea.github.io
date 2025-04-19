@@ -312,13 +312,13 @@
     </section>
     <section id="competitions-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
       <div class="table-container" align="center">
-          <table id="competitionTable" style="border:1px black solid;border-radius: 5px;">
+          <table id="compTable" style="border:1px black solid;border-radius: 5px;">
               <thead>
                   <tr style="background-color: 189EA2;color:white;">
-                      <th onclick="sortTable(0,'competitionTable')"><p>Date <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(1,'competitionTable')"><p>Time <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(2,'competitionTable')"><p>Competition <span class="fa fa-caret-down"></span></p></th>
-                      <th onclick="sortTable(3,'competitionTable')"><p>Heats <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(0,'compTable')"><p>Date <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(1,'compTable')"><p>Time <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(2,'ccompTable')"><p>Competition <span class="fa fa-caret-down"></span></p></th>
+                      <th onclick="sortTable(3,'compTable')"><p>Heats <span class="fa fa-caret-down"></span></p></th>
                       <th style="display:none;"><p>Id</p></th>
                       <th style="display:none;"><p>Event</p></th>
                   </tr>
@@ -348,6 +348,7 @@
           </datalist>
           <script type="text/javascript">
             async function saveCompetition(data) {
+              console.log("saving Comp...");
               var hasHeats = true;
               for ( var d in data ) {
                 if ( data[d] === "" && d === "Heats" ) hasHeats = false;
