@@ -162,7 +162,7 @@
     <nav class="navigation">
       <a href="#" class="navigation-item active" id="schedule-tab" onclick="event.preventDefault();clickTab(this);">Schedule</a>
       <a href="#" class="navigation-item" id="competitions-tab" onclick="event.preventDefault();clickTab(this);">Competitions</a>
-      <a href="#" class="navigation-item" id="dancers-tab" onclick="event.preventDefault();clickTab(this);">Dancers</a>
+      <a href="#" class="navigation-item" id="dancers-tab" onclick="event.preventDefault();loadDancerList();clickTab(this);">Dancers</a>
       <a href="#" class="navigation-item" id="profile-tab" onclick="event.preventDefault();clickTab(this);if(userID===undefined){documentSet('logoutButton','click');login()}";>Profile</a>
       <script type="text/javascript">
           function clickTab(tab) {
@@ -406,7 +406,7 @@
       </div>
     </section>
     <section id="profile-tabContent"  class="myProfile" align="center" style="display: none;margin-top: 20px;">
-        <img id="profileImage" src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" alt="Select Profile Image" style="display: inline;max-width: 150px;font-weight: bold;font-size: 10px;">
+        <img id="profileImage" onerror="this.style.display='none'" src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" alt="Select Profile Image" style="display: inline;max-width: 150px;font-weight: bold;font-size: 10px;">
         <input type="file" id="imageInput" style="display: none;" accept="image/*">
         <button id="changeImageButton" class="fa fa-camera" style="display: inline;background-color: #ec088c;border-color: #ec088c;color: white;border-radius: 20px;padding: 10px;"></button><br><br>
         <script type="text/javascript">
@@ -664,7 +664,7 @@
                     });*/
 
                 Swal.fire({
-                    title: 'Login to start',
+                    title: 'Login or Sign up to start',
                     html:
                         '<input type="email" id="email" class="swal2-input" placeholder="Email">' +
                         '<input type="password" id="password" class="swal2-input" placeholder="Password (min 6 characters)">',
@@ -766,7 +766,7 @@
         //userID = "RMETHBA9CEdhaPvLrYThM4Hv9073";
         console.log(userID);
         //if ( user.isAnonymous ) userID = "test";
-        await setupFirebase();
+        await setupFirebase(false);
       });
     };
 
@@ -783,8 +783,9 @@
         });
     });
 
-    async function setupFirebase() {
-      Swal.fire({html:`<img src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />`});
+    async function setupFirebase(resync) {
+      if ( resync === undefined ) resync = false;
+      Swal.fire({title:`Loading...`,html:`<img src="https://firebasestorage.googleapis.com/v0/b/wcs-comps.appspot.com/o/dancers%2FZv2YTgSD4mdlafzdKBwLdUeaDMo2jpg?alt=media&token=81aa199e-2d8d-4a24-bff1-5101e269b788" />`});
       Swal.showLoading();
       const db = firebase.firestore();
       settingsDatabase = db.collection("Settings");
@@ -825,7 +826,13 @@
 
       allDancers = {};
       allDancers_list = {};
-      var allDancers_data = await getFirebase(dancersDatabase,{field:"Current Event",query:"==",input:myEvent});
+      if ( resync ) {
+        var allDancers_data = await getFirebase(dancersDatabase,{field:"Current Event",query:"==",input:myEvent});
+      } else {
+        var allDancers_data = await getFirebase(settingsDatabase , myEvent)
+        allDancers_data = allDancers_data["dancers"];
+        //settingsDatabase.doc(myEvent).set({dancers:allDancers_data}, {merge:true});
+      }
       //console.log(allDancers_data);
       for ( var d in allDancers_data ) {
         var dancerData = allDancers_data[d];
@@ -841,7 +848,7 @@
         });
         return;
       }
-      await loadDancerList();
+      //await loadDancerList();
 
 
       var dancerSearchValues = documentSet("dancerSearch","get","value").trim();
@@ -871,10 +878,24 @@
 
       documentSet("competitionTable","innerHTML","");
       competitionsData = await getFirebase(competitionDatabase,{field:"Event",query:"==",input:myEvent});
+      //console.log(competitionsData);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // normalize to midnight for accurate comparison
+
+      competitionsData = competitionsData.filter(comp => {
+        //console.log(comp.Date);
+        const compDate = new Date(comp.Date);
+        compDate.setHours(0, 0, 0, 0); // also normalize
+        return compDate >= today;
+      });
+      competitionsData.filter(Boolean);
+      //console.log(competitionsData)
+
       competitionsData = competitionsData.sort((a, b) => {
           // Compare Dates
-          if (a.Date < b.Date) return -1;
-          if (a.Date > b.Date) return 1;
+          if (new Date(a.Date) < new Date(b.Date)) return -1;
+          if (new Date(a.Date) > new Date(b.Date)) return 1;
 
           // Dates are equal, compare Times
           if (a.Time < b.Time) return -1;
@@ -901,11 +922,13 @@
           competitionOptions[competitionData.Id+"H"+cH] = readObject(competitionData,"Competition")+" Heat "+cH;
         }
       }
+      //console.log(allCompetitions);
       //console.log(competitionOptions);
       documentSet("competitionHeat_options","innerHTML",await setupOptions(competitionOptions,"private","",true));
 
 
-      heatSchedule = await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
+      heatSchedule = await getFirebase(scheduleDatabase,{field:"Competition",query:"in",input:Object.keys(competitionOptions)});
+      //await getFirebase(scheduleDatabase,{field:"Event",query:"==",input:myEvent});
       //console.log(heatSchedule);
       if ( dancerSearchKeys.length > 0 ) {
         if ( searchBoth ) {
@@ -931,10 +954,11 @@
       var notificationBell = 0;
       for ( var h in heatSchedule ) {
         var scheduleData = heatSchedule[h];
-        //console.log(scheduleData);
+        console.log(scheduleData);
         var competitionID = scheduleData.Competition.substring(0,8);
         var competitionData = allCompetitions[competitionID];
-        //console.log(competitionData);
+        if ( competitionData === undefined ) return;
+        console.log(competitionData);
         heatSchedule[h].Date = competitionData.Date;
         heatSchedule[h].Time = competitionData.Time;
         heatSchedule[h].Heats = competitionData.Heats;
@@ -942,7 +966,7 @@
       }
       documentSet(":root","--notification-bell", `"`+notificationBell+`"`);
 
-      //console.log("heatSchedule");
+      console.log("heatSchedule");
       heatSchedule = heatSchedule.sort((a, b) => {
           // Compare Dates
           if (a.Date < b.Date) return -1;
@@ -971,7 +995,7 @@
           // All fields are equal
           return 0;
       });
-      //console.log(heatSchedule);
+      console.log(heatSchedule);
 
       for ( var h in heatSchedule ) {
         addHeat(heatSchedule[h]);
@@ -1067,7 +1091,7 @@
           dancersTable.innerHTML += `
             <tr>
                 <td>`+dancerBibs[d]+`</td>
-                <td><img src="`+readObject(dancerData,"Profile")+`" style="max-width: 100px;"></td>
+                <td><img onerror="this.style.display='none'" src="`+readObject(dancerData,"Profile")+`" style="max-width: 100px;"></td>
                 <td>`+readObject(dancerData,"Name")+`</td>
             </tr>
           `;
