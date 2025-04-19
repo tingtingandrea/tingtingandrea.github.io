@@ -505,14 +505,15 @@
             delete form.bibNumber;
             console.log(form);
             await dancersDatabase.doc(userID).set(form, {merge:true});
-            if ( !eventsList.includes(form["Current Event"]) ) {
+            /*if ( !eventsList.includes(form["Current Event"]) ) {
               settingsDatabase.doc("eventsList").set({"events":firebase.firestore.FieldValue.arrayUnion(...[form["Current Event"]])}, {merge:true});
               documentSet("eventLists_options","get").innerHTML += await setupOptions([form["Current Event"]]);
-            }
+            }*/
+            //settingsDatabase.doc(myEvent).set({"dancers":firebase.firestore.FieldValue.arrayUnion(...[form])}, {merge:true});
             Swal.fire({
               title: "Profile Saved."
             });
-            if ( firstLogin ) setupFirebase();
+            if ( firstLogin ) setupFirebase(true);
           }
         </script>
         <!--Ability to claim anoyomous profiles-->
