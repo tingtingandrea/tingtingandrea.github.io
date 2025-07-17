@@ -162,7 +162,7 @@
     <nav class="navigation">
       <a href="#" class="navigation-item active" id="schedule-tab" onclick="event.preventDefault();clickTab(this);">Schedule</a>
       <a href="#" class="navigation-item" id="competitions-tab" onclick="event.preventDefault();clickTab(this);">Competitions</a>
-      <a href="#" class="navigation-item" id="dancers-tab" onclick="event.preventDefault();loadDancerList();clickTab(this);">Dancers</a>
+      <a href="#" class="navigation-item" id="dancers-tab" onclick="event.preventDefault();loadDancerList();clickTab(this);documentSet(this.id,'onclick','event.preventDefault();clickTab(this);')">Dancers</a>
       <a href="#" class="navigation-item" id="profile-tab" onclick="event.preventDefault();clickTab(this);if(userID===undefined){documentSet('logoutButton','click');login()}";>Profile</a>
       <script type="text/javascript">
           function clickTab(tab) {
