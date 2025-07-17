@@ -842,7 +842,7 @@
         if ( dancerData.Name !== undefined ) allDancers_list[dancerData.Id] = readObject(dancerData,"Name");
       }
       documentSet("dancersList_options","innerHTML",await setupOptions(allDancers_list,"private","",true));
-      //console.log(allDancers);
+      console.log(allDancers);
 
       if ( myEvent === undefined || myEvent === "" ) {
         Swal.fire({
