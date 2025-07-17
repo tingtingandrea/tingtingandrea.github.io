@@ -830,10 +830,10 @@
       allDancers_list = {};
       if ( resync ) {
         var allDancers_data = await getFirebase(dancersDatabase,{field:"Current Event",query:"==",input:myEvent});
+        settingsDatabase.doc(myEvent).set({dancers:allDancers_data}, {merge:true});
       } else {
         var allDancers_data = await getFirebase(settingsDatabase , myEvent)
         allDancers_data = allDancers_data["dancers"];
-        settingsDatabase.doc(myEvent).set({dancers:allDancers_data}, {merge:true});
       }
       //console.log("checking");
       //console.log(allDancers_data);
