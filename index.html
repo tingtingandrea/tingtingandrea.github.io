@@ -510,7 +510,7 @@
               settingsDatabase.doc("eventsList").set({"events":firebase.firestore.FieldValue.arrayUnion(...[form["Current Event"]])}, {merge:true});
               documentSet("eventLists_options","get").innerHTML += await setupOptions([form["Current Event"]]);
             }*/
-            //settingsDatabase.doc(myEvent).set({"dancers":firebase.firestore.FieldValue.arrayUnion(...[form])}, {merge:true});
+            settingsDatabase.doc(myEvent).set({"dancers":firebase.firestore.FieldValue.arrayUnion(...[form])}, {merge:true});
             Swal.fire({
               title: "Profile Saved."
             });
